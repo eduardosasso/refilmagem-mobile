@@ -2,52 +2,36 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>jQTouch</title>
-        <style type="text/css" media="screen">@import "jqtouch/jqtouch.css";</style>
-        <style type="text/css" media="screen">@import "jqtouch/themes/jqt/theme.css";</style>
-        <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
-        <script type="text/javascript" charset="utf-8" src="jqtouch/jqtouch.js"></script>
-        <script type="text/javascript" charset="utf-8">
-            var jqt = new $.jQTouch();
+        <title>Refilmagem</title>
+		<style type="text/css" media="screen">@import "jqtouch/jqtouch.min.css";</style>
+        <style type="text/css" media="screen">@import "themes/apple/theme.min.css";</style>
+        <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+		<script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>
+        <script src="jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>        
+        <script type="text/javascript" charset="utf-8">			
+            var jqt = new $.jQTouch();		
         </script>
     </head>
     <body>
         <div id="home">
-            <div class="toolbar">
-                <h1>Home</h1>
+	        <div class="toolbar">
+                <h1>Refilmagem</h1>
             </div>
-            <ul class="rounded">
-                <li class="arrow"><a href="#panel1">Panel 1</a></li>
-                <li class="arrow"><a href="#panel2">Panel 2</a></li>
-                <li class="arrow"><a href="#panel3">Panel 3</a></li>
-            </ul>
+            <ul class="rounded" id="cidades"></ul>
         </div>
-        <div id="panel1">
+        <div id="proximas-sessoes">
             <div class="toolbar">
-                <h1>Title</h1>
-                <a class="back" href="#">Home</a>
+                <h1>Próximas Sessões</h1>
+                <a class="back" href="#">←</a>
             </div>
-            <div class="info">
-                <p>Hi there!</p>
-            </div>
+            <ul class="rounded"></ul>
         </div>
-        <div id="panel2">
+        <div id="cinemas">
             <div class="toolbar">
-                <h1>Title</h1>
-                <a class="back" href="#">Home</a>
+                <h1></h1>
+                <a class="back" href="#">←</a>
             </div>
-            <div class="info">
-                <p>Hi there!</p>
-            </div>
-        </div>
-        <div id="panel3">
-            <div class="toolbar">
-                <h1>Title</h1>
-                <a class="back" href="#">Home</a>
-            </div>
-            <div class="info">
-                <p>Hi there!</p>
-            </div>
+            <ul class="rounded"></ul>
         </div>
     </body>
 </html>
