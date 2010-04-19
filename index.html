@@ -8,28 +8,30 @@
         <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 		<script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>
         <script src="jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>        
+		<script src="http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ" type="text/javascript"></script>
         <script type="text/javascript" charset="utf-8">			
             var jqt = new $.jQTouch();		
         </script>
     </head>
     <body>
-        <div id="home">
+        <div id="cidades">
 	        <div class="toolbar">
                 <h1>Refilmagem</h1>
             </div>
-            <ul class="rounded" id="cidades"></ul>
+            <ul class="rounded"></ul>
         </div>
-        <div id="proximas-sessoes">
+        <div id="proximas-sessoes" class="current">
             <div class="toolbar">
                 <h1>Próximas Sessões</h1>
-                <a class="back" href="#">←</a>
+                <a class="button cidades" href="#cidades">Cidades</a>
             </div>
             <ul class="rounded"></ul>
         </div>
         <div id="cinemas">
             <div class="toolbar">
                 <h1></h1>
-                <a class="back" href="#">←</a>
+                <a class="back" href="#">Voltar</a>
+                <a class="button cidades" href="#cidades">Cidades</a>
             </div>
             <ul class="rounded"></ul>
         </div>
