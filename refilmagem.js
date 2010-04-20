@@ -11,6 +11,21 @@ var rfmg = {
 		$.getJSON(_url, callback);
 		
 	},
+
+	cidade_meta: function(cidade, callback) {
+		var _this = this;
+	
+		url = rfmg.url + "cidades/" + escape(cidade);
+
+		rfmg.request(url, function(data) {
+		    metadata =  data.query.results.json.nodes;
+		
+			console.log(metadata);
+			
+			callback.call(_this, metadata);
+		});	
+		
+	},
 	
 	cidades : function(callback){
 		var _this = this;
@@ -110,10 +125,11 @@ var rfmg = {
 
 view = {
 	onde_estou: '',
+	cidade: '',
 	
-	onde_estou: function(localizacao) {
-		$('#cinemas h2').html(localizacao);
-		onde_estou = localizacao;
+	minha_localizacao: function(latlong, _cidade) {
+		onde_estou = latlong;
+		cidade = _cidade;
 	},
 	
 	cidades: function(){
@@ -141,7 +157,11 @@ view = {
 		});
 	},
 	
-	proximas_sessoes: function(cidade) {
+	cidade_usuario: function(){
+		
+	},
+	
+	proximas_sessoes: function() {
 		rmfg.proximas_sessoes(cidade,function(sessoes){
 			$.each(sessoes, function(i,item) {
 				sessao = item.hora + " › " + item.title;
@@ -160,7 +180,7 @@ view = {
 		});
 	},
 	
-	cinemas: function(cidade){
+	cinemas: function(){
 		if ($('#cinemas ul#cinemas-proximos').length == 0) {
 			$('#cinemas h2').before($('<ul/>').attr('id','cinemas-proximos'));
 			$('#cinemas ul#cinemas-proximos').before('<h2>Mais próximos</h2>');
@@ -192,22 +212,31 @@ view = {
 var jqt = new $.jQTouch();
 
 $(function (){
-	var lookup = jqt.updateLocation(function(coords){
-        if (coords) {
-			localizacao = coords.latitude + ',' + coords.longitude; 
-			view.onde_estou(localizacao);
-			view.cinemas(70);
+	$('#dashboard ul').hide();
+	
+	//arteplex
+	// localizacao = '-30.02167427,-51.16154187';
+	
+	jqt.updateLocation(function(geo){
+        if (geo) {
+			latlong = geo.latitude + ',' + geo.longitude;
+			cidade = geo.city;
+			
+			rfmg.cidade_meta(cidade,function(metadata){
+				$('#dashboard ul').show();
+				$('#dashboard h2').text(cidade);
+				
+				/*
+					TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
+				*/
+				view.minha_localizacao(latlong, metadata.tid);
+			});
+			
         } else {
 			$('#cinemas h2').text('Localização desconhecida');
         }
+
+		//view.cinemas(70);
     });
-
-    if (lookup) {
-        $('#cinemas h2').text('Procurando sua localização...');
-    }
-
-	//view.cidades();
-	
-	
 	
 });
