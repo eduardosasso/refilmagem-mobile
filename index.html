@@ -6,36 +6,48 @@
 		<style type="text/css" media="screen">@import "jqtouch/jqtouch.min.css";</style>
         <style type="text/css" media="screen">@import "themes/apple/theme.min.css";</style>
         <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-		<script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>
         <script src="jqtouch/jqtouch.min.js" type="application/x-javascript" charset="utf-8"></script>        
-		<script src="http://maps.google.com/maps?file=api&v=2&sensor=true&key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ" type="text/javascript"></script>
-        <script type="text/javascript" charset="utf-8">			
-            var jqt = new $.jQTouch();		
-        </script>
+        <script src="jqtouch/extensions/jqt.location.js" type="application/x-javascript" charset="utf-8"></script>
+		<script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>
     </head>
     <body>
-        <div id="cidades"  class="current">
+		<div id="dashboard">
+			<div class="toolbar">
+                <h1>Refilmagem</h1>
+            </div>
+			<h2></h2>
+            <ul class="rounded">
+            	<li class="arrow"><a href="#cidades">Cidades</a></li>
+            	<li class="arrow"><a href="#cinemas">Cinemas</a></li>
+            	<li class="arrow"><a href="#proximas-sessoes">Próximas Sessões</a></li>
+            </ul>
+		</div>
+		
+        <div id="cidades">
 	        <div class="toolbar">
                 <h1>Cidades</h1>
+                <a class="button" href="#dashboard">Home</a>
             </div>
             <ul class="rounded"></ul>
         </div>
+
         <div id="proximas-sessoes">
             <div class="toolbar">
                 <h1>Próximas Sessões</h1>
-                <a class="button cidades" href="#cidades">Cidades</a>
+                <a class="button" href="#dashboard">Home</a>
             </div>
             <ul class="rounded"></ul>
         </div>
-        <div id="cinemas">
+
+        <div id="cinemas" class="current">
             <div class="toolbar">
                 <h1>Cinemas</h1>
                 <a class="back" href="#">Voltar</a>
-                <a class="button cidades" href="#cidades">Cidades</a>
+                <a class="button" href="#dashboard">Home</a>
             </div>
 			<h2>Outros</h2>
             <ul class="rounded"></ul>
-			
         </div>
+
     </body>
 </html>

@@ -48,7 +48,7 @@ var rfmg = {
 			});	
 	},
 	
-	proximas_sessoes = function(cidade, callback) {
+	proximas_sessoes: function(cidade, callback) {
 		var _this = this;
 		
 		url = rmfg.url + "proximas-sessoes/" + cidade;
@@ -112,6 +112,7 @@ view = {
 	onde_estou: '',
 	
 	onde_estou: function(localizacao) {
+		$('#cinemas h2').html(localizacao);
 		onde_estou = localizacao;
 	},
 	
@@ -156,8 +157,8 @@ view = {
 				
 				$('#proximas-sessoes ul').append(list_item);
 			});
-		})
-	}
+		});
+	},
 	
 	cinemas: function(cidade){
 		if ($('#cinemas ul#cinemas-proximos').length == 0) {
@@ -188,13 +189,24 @@ view = {
 	},
 }
 
+var jqt = new $.jQTouch();
 
 $(function (){
-	localizacao = '-29.9986925,-51.1487349';
-	
-	view.onde_estou(localizacao);
-	//view.cinemas(70);
-	view.cidades();
+	var lookup = jqt.updateLocation(function(coords){
+        if (coords) {
+			localizacao = coords.latitude + ',' + coords.longitude; 
+			view.onde_estou(localizacao);
+			view.cinemas(70);
+        } else {
+			$('#cinemas h2').text('Localização desconhecida');
+        }
+    });
+
+    if (lookup) {
+        $('#cinemas h2').text('Procurando sua localização...');
+    }
+
+	//view.cidades();
 	
 	
 	
