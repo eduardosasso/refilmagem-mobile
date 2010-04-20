@@ -9,6 +9,7 @@ var rfmg = {
 		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
 
 		$.getJSON(_url, callback);
+		
 	},
 	
 	cinemas: function(cidade, callback){
@@ -31,7 +32,7 @@ var rfmg = {
 					_cinemas.push(cinema);
 				});
 
-				callback.call(_this,_cinemas);
+				callback.call(_this, _cinemas);
 			});	
 	},
 	
@@ -44,27 +45,63 @@ var rfmg = {
 		
 		rfmg.request(google_maps, function(data) {
 			result = data.query.results.json;
-			directions = result.Directions;
-			status = result.Status;
+			// directions = result.Directions;
+			//status = result.Status;
 			
 			 callback.call(_this,result);
 		});	
-	} 	
+	},
+	
+	cinemas_por_proximidade: function(cidade, onde_estou, callback) {
+		var _this = this;		
+
+		rfmg.cinemas(cidade,function(cinemas){
+			var z = 0;
+			
+			$.each(cinemas, function(key, cinema) { 
+				rfmg.get_distancia(onde_estou, cinema.endereco, function(distancia){
+					//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
+					if (distancia.Status.code == 200) {
+						cinema.distancia = parseInt(distancia.Directions.Distance.meters);
+					} else {
+						cinema.distancia = parseInt(0);
+					}
+					
+					z++;										
+					//depois q pegou a distancia de todos os cinemas ordena e retorna
+					if (z == cinemas.length ) {
+						cinemas.sort(function(a,b){
+							return a.distancia - b.distancia;
+						});
+						
+						callback.call(_this,cinemas);	
+					};
+					
+				});
+			});
+		});
+	},
+
 }
 
 
 $(function (){
 	onde_estou = '-29.9986925,-51.1487349';
 	
-	rfmg.cinemas('porto-alegre',function(data){
-		$.each(data, function(key, cinema) { 
-			
-			rfmg.get_distancia(onde_estou, cinema.endereco, function(distancia){
-				//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
-				if (distancia.Status.code == 200) {
-					cinema.distancia = distancia.Directions.Distance.meters;
-				};
+	rfmg.cinemas_por_proximidade('porto-alegre',onde_estou, function(data){
+		
+		$.each(data, function(index, cinema) {
+			anchor = $('<a/>', {  
+				id: cinema.id,
+			    href: '#cinema',  
+			    text: cinema.nome  
 			});
+			
+			list_item = $('<li/>').attr('class','arrow').append(anchor);
+			
+			$('#cinemas ul').append(list_item);
 		});
+		
 	});
+	//jqt.goTo($('#cinemas'));
 });
