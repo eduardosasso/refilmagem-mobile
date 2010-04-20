@@ -26,9 +26,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>67</integer>
+				<integer>41</integer>
 				<key>line</key>
-				<integer>10</integer>
+				<integer>16</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -102,18 +102,49 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>25</integer>
+				<integer>145</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>116</integer>
+		</dict>
+		<key>temp.txt</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>96</integer>
+				<key>line</key>
+				<integer>76</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>50</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>110</integer>
+				<key>line</key>
+				<integer>76</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>96</integer>
+				<key>line</key>
+				<integer>76</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
 		<string>refilmagem.js</string>
+		<string>temp.txt</string>
 		<string>jqtouch/jqtouch.css</string>
 		<string>jqtouch/jqtouch.js</string>
 	</array>

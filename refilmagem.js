@@ -12,12 +12,24 @@ var rfmg = {
 		
 	},
 	
+	cidades : function(callback){
+		var _this = this;
+	
+		url = rfmg.url + "cidades";
+
+		rfmg.request(url, function(data) {
+		    cidades =  data.query.results.json.nodes;
+			
+			callback.call(_this, cidades);
+		});	
+	},
+		
 	cinemas: function(cidade, callback){
 		 	var _this = this;
 		
-			rfmg.url += cidade + "/cinemas";
+			url = rfmg.url + cidade + "/cinemas";
 
-			rfmg.request(rfmg.url, function(data) {
+			rfmg.request(url, function(data) {
 			    cinemas =  data.query.results.json.nodes;
 			
 				var _cinemas = new Array(); 
@@ -36,7 +48,20 @@ var rfmg = {
 			});	
 	},
 	
-	get_distancia: function(endereco_inicio, endereco_fim, callback) {
+	proximas_sessoes = function(cidade, callback) {
+		var _this = this;
+		
+		url = rmfg.url + "proximas-sessoes/" + cidade;
+
+		request(url, function(data) {
+		    sessoes =  data.query.results.json.nodes;
+
+			callback.call(_this, sessoes);
+		});
+	},
+	
+	
+	distancia: function(endereco_inicio, endereco_fim, callback) {
 	 	var _this = this;
 	
 		var google_maps = "http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=";
@@ -59,12 +84,12 @@ var rfmg = {
 			var z = 0;
 			
 			$.each(cinemas, function(key, cinema) { 
-				rfmg.get_distancia(onde_estou, cinema.endereco, function(distancia){
+				rfmg.distancia(onde_estou, cinema.endereco, function(distancia){
 					//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
 					if (distancia.Status.code == 200) {
 						cinema.distancia = parseInt(distancia.Directions.Distance.meters);
 					} else {
-						cinema.distancia = parseInt(0);
+						cinema.distancia = parseInt(999990);
 					}
 					
 					z++;										
@@ -81,27 +106,96 @@ var rfmg = {
 			});
 		});
 	},
+}
 
+view = {
+	onde_estou: '',
+	
+	onde_estou: function(localizacao) {
+		onde_estou = localizacao;
+	},
+	
+	cidades: function(){
+		rfmg.cidades(function(data){
+			$.each(data, function(index, cidade) {
+				anchor = $('<a/>', {  
+					id: cidade.tid,
+					href: '#cinemas',  
+					text: cidade.term_data_name  
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+				$('#cidades ul').append(list_item);				
+			});
+
+			//trocar por TAP depois
+			$('#cidades ul li a').click(function(){
+				cidade = $(this).attr('id');
+
+				$('#cinemas ul').empty();
+				view.cinemas(cidade);
+			});
+
+		});
+	},
+	
+	proximas_sessoes: function(cidade) {
+		rmfg.proximas_sessoes(cidade,function(sessoes){
+			$.each(sessoes, function(i,item) {
+				sessao = item.hora + " › " + item.title;
+				class_ = cidade + " " + item.hora;
+				
+				anchor = $('<a/>', {  
+					id: item.nid,
+				    href: '#cinemas',  
+				    text: sessao
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+				
+				$('#proximas-sessoes ul').append(list_item);
+			});
+		})
+	}
+	
+	cinemas: function(cidade){
+		if ($('#cinemas ul#cinemas-proximos').length == 0) {
+			$('#cinemas h2').before($('<ul/>').attr('id','cinemas-proximos'));
+			$('#cinemas ul#cinemas-proximos').before('<h2>Mais próximos</h2>');
+		};
+		rfmg.cinemas_por_proximidade(cidade,onde_estou, function(data){
+
+			$.each(data, function(index, cinema) {
+				anchor = $('<a/>', {  
+					id: cinema.id,
+				    href: '#cinema',  
+				    text: cinema.nome  
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+				if (index <= 4) {
+					$('#cinemas ul#cinemas-proximos').append(list_item);
+				} else {
+					$('#cinemas ul:not(#cinemas-proximos)').append(list_item);
+				}
+
+
+			});
+
+		});
+	},
 }
 
 
 $(function (){
-	onde_estou = '-29.9986925,-51.1487349';
+	localizacao = '-29.9986925,-51.1487349';
 	
-	rfmg.cinemas_por_proximidade('porto-alegre',onde_estou, function(data){
-		
-		$.each(data, function(index, cinema) {
-			anchor = $('<a/>', {  
-				id: cinema.id,
-			    href: '#cinema',  
-			    text: cinema.nome  
-			});
-			
-			list_item = $('<li/>').attr('class','arrow').append(anchor);
-			
-			$('#cinemas ul').append(list_item);
-		});
-		
-	});
-	//jqt.goTo($('#cinemas'));
+	view.onde_estou(localizacao);
+	//view.cinemas(70);
+	view.cidades();
+	
+	
+	
 });
