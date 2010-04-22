@@ -19,8 +19,6 @@ var rfmg = {
 
 		rfmg.request(url, function(data) {
 		    metadata =  data.query.results.json.nodes;
-		
-			console.log(metadata);
 			
 			callback.call(_this, metadata);
 		});	
@@ -66,9 +64,9 @@ var rfmg = {
 	proximas_sessoes: function(cidade, callback) {
 		var _this = this;
 		
-		url = rmfg.url + "proximas-sessoes/" + cidade;
+		url = rfmg.url + "proximas-sessoes/" + cidade;
 
-		request(url, function(data) {
+		rfmg.request(url, function(data) {
 		    sessoes =  data.query.results.json.nodes;
 
 			callback.call(_this, sessoes);
@@ -126,10 +124,24 @@ var rfmg = {
 view = {
 	onde_estou: '',
 	cidade: '',
+	nome_cidade: '',
 	
-	minha_localizacao: function(latlong, _cidade) {
+	set_minha_localizacao: function(latlong, _cidade, _nome_cidade) {
 		onde_estou = latlong;
+		
+		view.set_minha_cidade(_cidade, _nome_cidade);
+	},
+	
+	set_minha_cidade: function(_cidade,_nome_cidade) {
 		cidade = _cidade;
+		nome_cidade = _nome_cidade;		
+	},
+	
+	minha_cidade: function(){
+		return {
+			id: cidade,
+			nome: nome_cidade,			
+		}
 	},
 	
 	cidades: function(){
@@ -137,7 +149,7 @@ view = {
 			$.each(data, function(index, cidade) {
 				anchor = $('<a/>', {  
 					id: cidade.tid,
-					href: '#cinemas',  
+					href: '#home',  
 					text: cidade.term_data_name  
 				});
 
@@ -149,20 +161,16 @@ view = {
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
 				cidade = $(this).attr('id');
-
-				$('#cinemas ul').empty();
-				view.cinemas(cidade);
+				nome = $(this).text();
+				
+				view.set_minha_cidade(cidade,nome);				
 			});
 
 		});
 	},
 	
-	cidade_usuario: function(){
-		
-	},
-	
 	proximas_sessoes: function() {
-		rmfg.proximas_sessoes(cidade,function(sessoes){
+		rfmg.proximas_sessoes(cidade,function(sessoes){
 			$.each(sessoes, function(i,item) {
 				sessao = item.hora + " › " + item.title;
 				class_ = cidade + " " + item.hora;
@@ -189,7 +197,7 @@ view = {
 
 			$.each(data, function(index, cinema) {
 				anchor = $('<a/>', {  
-					id: cinema.id,
+					id: cinema.nid,
 				    href: '#cinema',  
 				    text: cinema.nome  
 				});
@@ -209,34 +217,77 @@ view = {
 	},
 }
 
-var jqt = new $.jQTouch();
+var jqt = new $.jQTouch({
+	useFastTouch: false,
+});
 
-$(function (){
-	$('#dashboard ul').hide();
+// Pega a localizacao do usuario e define latitudo, longitude e cidade. 
+// Tem q validar se vem de uma cidade nao atendida.
+var init = function(){
+	geo_meta_url = "http://maps.google.com/maps/geo?sensor=false&q=";
 	
 	//arteplex
 	// localizacao = '-30.02167427,-51.16154187';
 	
+	$('#home ul').hide();
+	
 	jqt.updateLocation(function(geo){
         if (geo) {
 			latlong = geo.latitude + ',' + geo.longitude;
-			cidade = geo.city;
 			
-			rfmg.cidade_meta(cidade,function(metadata){
-				$('#dashboard ul').show();
-				$('#dashboard h2').text(cidade);
+			geo_meta_url += latlong;
+			
+			rfmg.request(geo_meta_url,function(meta){
+				cidade = meta.query.results.json.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
 				
-				/*
-					TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
-				*/
-				view.minha_localizacao(latlong, metadata.tid);
-			});
-			
+				rfmg.cidade_meta(cidade,function(metadata){
+					$('#home ul').show();
+					$('#home h2').text(cidade);
+
+					/*
+						TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
+					*/
+					view.set_minha_localizacao(latlong, metadata.tid);
+				});
+				
+			})			
         } else {
 			$('#cinemas h2').text('Localização desconhecida');
         }
-
-		//view.cinemas(70);
     });
 	
+}
+
+$(function (){
+	init();
+	
+	$('#home, #cidades, #cinemas, #proximas-sessoes').bind('pageAnimationEnd', function(e, info){
+		if (info.direction == 'out') return;
+		
+		var $page = $(this);
+		//if ($page.data('loaded')) return;
+		
+		id = $(this).attr('id');
+		
+		switch (id) {
+			case 'home':			
+			$('h2', $page).text(view.minha_cidade().nome);
+			break;
+			
+			case 'cidades': 
+			view.cidades();
+			break;
+
+			case 'cinemas': 
+			view.cinemas();
+			break;	
+			
+			case 'proximas-sessoes': 
+			view.proximas_sessoes();
+			break;	
+		}
+		
+		$page.data('loaded', true);
+
+	});
 });
