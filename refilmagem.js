@@ -1,37 +1,55 @@
 var rfmg = {
-	url : "http://beta.refilmagem.com.br/api/",
-	
-	request: function(url, callback) {
+	url : "http://beta.refilmagem.com.br",
 
+	request: function(url, callback) {
 		query = 'select * from json where url="' + url + '"';
 
 		var encodedQuery = encodeURIComponent(query.toLowerCase()),
 		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
 
 		$.getJSON(_url, callback);
+	},
+	
+	service_request: function(data, callback) {
+		url = rfmg.url + "/services/json/";
 		
+		$.ajax({
+			type: 'GET',
+			dataType: 'jsonp',
+			url: url,
+			data: data,
+			success: callback
+		});		
 	},
 
 	cidade_meta: function(cidade, callback) {
 		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "lista_cidades", 
+			display_id: "page_3",
+			args: [cidade],
+		}
 	
-		url = rfmg.url + "cidades/" + escape(cidade);
-
-		rfmg.request(url, function(data) {
-		    metadata =  data.query.results.json.nodes;
+		rfmg.service_request(params, function(result) {
+		    metadata =  result.data[0];
 			
 			callback.call(_this, metadata);
 		});	
-		
 	},
 	
 	cidades : function(callback){
 		var _this = this;
-	
-		url = rfmg.url + "cidades";
 
-		rfmg.request(url, function(data) {
-		    cidades =  data.query.results.json.nodes;
+		params = {
+			method: "views.get", 
+			view_name: "lista_cidades", 
+			display_id: 'page_1'
+		}
+		
+		rfmg.service_request(params, function(result) {
+		    cidades = result.data;
 			
 			callback.call(_this, cidades);
 		});	
@@ -39,15 +57,26 @@ var rfmg = {
 		
 	cinemas: function(cidade, callback){
 		 	var _this = this;
-		
-			url = rfmg.url + cidade + "/cinemas";
+			
+			params = {
+				method: "views.get", 
+				view_name: "cinemas", 
+				display_id: 'default',
+				args: [cidade]
+			}
 
-			rfmg.request(url, function(data) {
-			    cinemas =  data.query.results.json.nodes;
+			rfmg.service_request(params, function(result) {
+			    cinemas =  result.data;
 			
 				var _cinemas = new Array(); 
-
-				$.each(cinemas, function(i,item) {
+				var cinema_anterior = '';
+				
+				//cinemas vem repetidos por causa dos horarios entao tem q filtrar
+				$.each(cinemas, function(i,item) {					
+					if (cinema_anterior == item.node_node_data_field_ref_cinema_nid) {
+						return true;
+					};
+					
 					var cinema = {  
 					  	nid : item.node_node_data_field_ref_cinema_nid,
 						nome : item.node_node_data_field_ref_cinema_title,
@@ -55,24 +84,44 @@ var rfmg = {
 					};
 					
 					_cinemas.push(cinema);
+					
+					cinema_anterior = cinema.nid;
 				});
 
 				callback.call(_this, _cinemas);
 			});	
 	},
 	
+	filme_cinemas: function(filme,cidade,horario) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "filme_cinemas", 
+			display_id: 'default',
+			args: [filme, cidade, horario]
+		}
+		
+		rfmg.service_request(params, function(result) {
+		    cinemas = result.data;
+		
+			console.log(cinemas);
+			
+			callback.call(_this, cinemas);
+		});		
+	},
+	
 	proximas_sessoes: function(cidade, callback) {
 		var _this = this;
 		
-		url = rfmg.url + "proximas-sessoes/" + cidade;
-
-		rfmg.request(url, function(data) {
-		    sessoes =  data.query.results.json.nodes;
-
+		url = rfmg.url + "/api/proximas-sessoes/" + cidade + "&callback=?";
+		
+		$.getJSON(url, function(result){
+			sessoes =  result.nodes;
 			callback.call(_this, sessoes);
+			
 		});
 	},
-	
 	
 	distancia: function(endereco_inicio, endereco_fim, callback) {
 	 	var _this = this;
@@ -145,8 +194,13 @@ view = {
 	},
 	
 	cidades: function(){
-		rfmg.cidades(function(data){
-			$.each(data, function(index, cidade) {
+		//so carrega uma vez
+		if ($(this).data('loaded')) return;
+
+		$(this).data('loaded', true);	
+		
+		rfmg.cidades(function(cidades){
+			$.each(cidades, function(index, cidade) {
 				anchor = $('<a/>', {  
 					id: cidade.tid,
 					href: '#home',  
@@ -177,6 +231,7 @@ view = {
 				
 				anchor = $('<a/>', {  
 					id: item.nid,
+					alt: item.hora,
 				    href: '#cinemas',  
 				    text: sessao
 				});
@@ -185,6 +240,16 @@ view = {
 				
 				$('#proximas-sessoes ul').append(list_item);
 			});
+			
+			$('#cinemas ul li a').click(function(){
+				console.log('aaa');
+				id = $(this).attr('id');
+				hora = $(this).attr('alt');
+				
+				console.log(id,hora);
+
+			});
+			
 		});
 	},
 	
@@ -241,6 +306,7 @@ var init = function(){
 				cidade = meta.query.results.json.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
 				
 				rfmg.cidade_meta(cidade,function(metadata){
+
 					$('#home ul').show();
 					$('#home h2').text(cidade);
 
@@ -248,6 +314,24 @@ var init = function(){
 						TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
 					*/
 					view.set_minha_localizacao(latlong, metadata.tid);
+					
+					$('#home ul li a').click(function(e){
+						id = $(this).attr('href');
+
+						switch (id) {
+							case '#cidades': 
+							view.cidades();
+							break;
+
+							case '#cinemas': 
+							view.cinemas();
+							break;	
+
+							case '#proximas-sessoes': 
+							view.proximas_sessoes();
+							break;	
+						}
+					});
 				});
 				
 			})			
@@ -261,33 +345,8 @@ var init = function(){
 $(function (){
 	init();
 	
-	$('#home, #cidades, #cinemas, #proximas-sessoes').bind('pageAnimationEnd', function(e, info){
+	$('#home').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
-		
-		var $page = $(this);
-		//if ($page.data('loaded')) return;
-		
-		id = $(this).attr('id');
-		
-		switch (id) {
-			case 'home':			
-			$('h2', $page).text(view.minha_cidade().nome);
-			break;
-			
-			case 'cidades': 
-			view.cidades();
-			break;
-
-			case 'cinemas': 
-			view.cinemas();
-			break;	
-			
-			case 'proximas-sessoes': 
-			view.proximas_sessoes();
-			break;	
-		}
-		
-		$page.data('loaded', true);
-
+		$('h2', $(this)).text(view.minha_cidade().nome);
 	});
 });
