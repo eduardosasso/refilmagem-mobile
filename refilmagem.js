@@ -92,7 +92,7 @@ var rfmg = {
 			});	
 	},
 	
-	filme_cinemas: function(filme,cidade,horario) {
+	filme_cinemas: function(filme, cidade, horario, callback) {
 		var _this = this;
 		
 		params = {
@@ -104,8 +104,6 @@ var rfmg = {
 		
 		rfmg.service_request(params, function(result) {
 		    cinemas = result.data;
-		
-			console.log(cinemas);
 			
 			callback.call(_this, cinemas);
 		});		
@@ -139,32 +137,30 @@ var rfmg = {
 		});	
 	},
 	
-	cinemas_por_proximidade: function(cidade, onde_estou, callback) {
+	ordena_por_proximidade: function(cinemas, campo_endereco, onde_estou, callback) {
 		var _this = this;		
+		var z = 0;
+		
+		$.each(cinemas, function(key, cinema) { 
+			endereco = eval('cinema.' + campo_endereco);
+			rfmg.distancia(onde_estou, endereco, function(distancia){
+				//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
+				if (distancia.Status.code == 200) {
+					cinema.distancia = parseInt(distancia.Directions.Distance.meters);
+				} else {
+					cinema.distancia = parseInt(999990);
+				}
 
-		rfmg.cinemas(cidade,function(cinemas){
-			var z = 0;
-			
-			$.each(cinemas, function(key, cinema) { 
-				rfmg.distancia(onde_estou, cinema.endereco, function(distancia){
-					//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
-					if (distancia.Status.code == 200) {
-						cinema.distancia = parseInt(distancia.Directions.Distance.meters);
-					} else {
-						cinema.distancia = parseInt(999990);
-					}
+				z++;										
+				//depois q pegou a distancia de todos os cinemas ordena e retorna
+				if (z == cinemas.length ) {
+					cinemas.sort(function(a,b){
+						return a.distancia - b.distancia;
+					});
 					
-					z++;										
-					//depois q pegou a distancia de todos os cinemas ordena e retorna
-					if (z == cinemas.length ) {
-						cinemas.sort(function(a,b){
-							return a.distancia - b.distancia;
-						});
-						
-						callback.call(_this,cinemas);	
-					};
-					
-				});
+					callback.call(_this,cinemas);	
+				};
+
 			});
 		});
 	},
@@ -200,11 +196,19 @@ view = {
 		$(this).data('loaded', true);	
 		
 		rfmg.cidades(function(cidades){
-			$.each(cidades, function(index, cidade) {
+			var ativo ='';
+			$.each(cidades, function(index, _cidade) {
+				ativo = '';
+				console.log(cidade);
+				if (_cidade.tid == cidade) {
+					ativo = 'default';
+				} 	
+				
 				anchor = $('<a/>', {  
-					id: cidade.tid,
+					id: _cidade.tid,
 					href: '#home',  
-					text: cidade.term_data_name  
+					text: _cidade.term_data_name,
+					class: ativo 
 				});
 
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
@@ -214,16 +218,21 @@ view = {
 
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
-				cidade = $(this).attr('id');
+				$('#cidades ul li a').removeClass('default');
+				$(this).addClass('default');
+				
+				cidade_id = $(this).attr('id');
 				nome = $(this).text();
 				
-				view.set_minha_cidade(cidade,nome);				
+				view.set_minha_cidade(cidade_id,nome);				
 			});
 
 		});
 	},
 	
 	proximas_sessoes: function() {
+		$('#proximas-sessoes ul').empty();
+		
 		rfmg.proximas_sessoes(cidade,function(sessoes){
 			$.each(sessoes, function(i,item) {
 				sessao = item.hora + " › " + item.title;
@@ -241,44 +250,65 @@ view = {
 				$('#proximas-sessoes ul').append(list_item);
 			});
 			
-			$('#cinemas ul li a').click(function(){
-				console.log('aaa');
-				id = $(this).attr('id');
+			$('#proximas-sessoes ul li a').click(function(){
+				filme = $(this).attr('id');
 				hora = $(this).attr('alt');
 				
-				console.log(id,hora);
+				rfmg.filme_cinemas(filme, cidade, hora, function(cinemas){					
+					if (cinemas.length == 1) {
+						cinema = cinemas[0];
+						
+						anchor = $('<a/>', {  
+							id: cinema.node_node_data_field_ref_cinema_nid,
+						    href: '#cinema',  
+						    text: cinema.node_node_data_field_ref_cinema_title,
+						});
 
+						list_item = $('<li/>').attr('class','arrow').append(anchor);
+						
+						$('#cinemas ul').append(list_item);
+						
+					} else {
+						endereco = 'node_node_data_field_ref_cinema__node_revisions_body';
+						
+						rfmg.ordena_por_proximidade(cinemas, endereco, onde_estou, function(data){
+							$.each(data, function(index, cinema) {
+								anchor = $('<a/>', {  
+									id: cinema.node_node_data_field_ref_cinema_nid,
+								    href: '#cinema',  
+								    text: cinema.node_node_data_field_ref_cinema_title,
+								});
+
+								list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+								$('#cinemas ul').append(list_item);
+							});
+						});
+					}
+				});
 			});
 			
 		});
 	},
-	
+
 	cinemas: function(){
-		if ($('#cinemas ul#cinemas-proximos').length == 0) {
-			$('#cinemas h2').before($('<ul/>').attr('id','cinemas-proximos'));
-			$('#cinemas ul#cinemas-proximos').before('<h2>Mais próximos</h2>');
-		};
-		rfmg.cinemas_por_proximidade(cidade,onde_estou, function(data){
+		rfmg.cinemas(cidade,function(cinemas){
+			rfmg.ordena_por_proximidade(cinemas, 'endereco', onde_estou, function(data){
+				$.each(data, function(index, cinema) {
 
-			$.each(data, function(index, cinema) {
-				anchor = $('<a/>', {  
-					id: cinema.nid,
-				    href: '#cinema',  
-				    text: cinema.nome  
+					anchor = $('<a/>', {  
+						id: cinema.id,
+					    href: '#cinema',  
+					    text: cinema.nome,
+					});
+
+					list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+					$('#cinemas ul').append(list_item);
 				});
-
-				list_item = $('<li/>').attr('class','arrow').append(anchor);
-
-				if (index <= 4) {
-					$('#cinemas ul#cinemas-proximos').append(list_item);
-				} else {
-					$('#cinemas ul:not(#cinemas-proximos)').append(list_item);
-				}
-
-
 			});
-
-		});
+			
+		});		
 	},
 }
 
@@ -345,7 +375,13 @@ var init = function(){
 $(function (){
 	init();
 	
-	$('#home').bind('pageAnimationEnd', function(e, info){
+	//sempre limpa a lista de cinemas quando entrar nessa tela
+	$('#cinemas').bind('pageAnimationEnd', function(e, info){
+		if (info.direction == 'out') return;
+		$('ul', $(this)).empty();
+	});
+	
+	$('#home,').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
 		$('h2', $(this)).text(view.minha_cidade().nome);
 	});
