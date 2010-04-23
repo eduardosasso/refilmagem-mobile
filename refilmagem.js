@@ -109,6 +109,23 @@ var rfmg = {
 		});		
 	},
 	
+	filmes_cinema: function(cinema, cidade, callback) {
+		var _this = this;
+
+		params = {
+			method: "views.get", 
+			view_name: "filmes_cinema", 
+			display_id: 'default',
+			args: [cinema, cidade]
+		}
+
+		rfmg.service_request(params, function(result) {
+			filmes = result.data;
+
+			callback.call(_this, filmes);
+		});		
+	},
+	
 	proximas_sessoes: function(cidade, callback) {
 		var _this = this;
 		
@@ -199,7 +216,6 @@ view = {
 			var ativo ='';
 			$.each(cidades, function(index, _cidade) {
 				ativo = '';
-				console.log(cidade);
 				if (_cidade.tid == cidade) {
 					ativo = 'default';
 				} 	
@@ -207,9 +223,8 @@ view = {
 				anchor = $('<a/>', {  
 					id: _cidade.tid,
 					href: '#home',  
-					text: _cidade.term_data_name,
-					class: ativo 
-				});
+					text: _cidade.term_data_name
+				}).attr('class', ativo);
 
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
 
@@ -218,6 +233,7 @@ view = {
 
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
+				//marca a cidade atual
 				$('#cidades ul li a').removeClass('default');
 				$(this).addClass('default');
 				
@@ -290,14 +306,51 @@ view = {
 			
 		});
 	},
+	
+	filmes_cinema: function(cinema){
+		rfmg.filmes_cinema(cinema, cidade, function(filmes){
+			$.each(filmes, function(index, filme) {
+				nid = filme.node_node_data_field_ref_filme_nid;
+				nome = filme.node_node_data_field_ref_filme_title;
+				estreia = filme.node_node_data_field_ref_filme_node_data_field_estreia_api_field_estreia_api_value;
+				pre_estreia = filme.node_node_data_field_ref_filme_node_data_field_estreia_api_field_pre_estreia_api_value;
+				poster = filme.files_node_data_field_poster_filepath;
+				
+				anchor = $('<a/>', {  
+					id: nid,
+				    href: '#filme',  
+				    text: nome,
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+				
+				if (estreia != null) {
+					estreias = estreia.split(",");
+					console.log(nome, estreias);
+					if ($.inArray(cidade, estreias) != -1) {
+						anchor_estreia = $('<a/>', {  
+							id: nid,
+						    href: '#filme',  
+						    text: '(estreia)',
+						});
+						
+						list_item.append(anchor_estreia);
+					};
+				};
+				
+
+				$('#cinema ul').append(list_item);
+				
+			});
+		})
+	},
 
 	cinemas: function(){
 		rfmg.cinemas(cidade,function(cinemas){
 			rfmg.ordena_por_proximidade(cinemas, 'endereco', onde_estou, function(data){
 				$.each(data, function(index, cinema) {
-
 					anchor = $('<a/>', {  
-						id: cinema.id,
+						id: cinema.nid,
 					    href: '#cinema',  
 					    text: cinema.nome,
 					});
@@ -375,10 +428,20 @@ var init = function(){
 $(function (){
 	init();
 	
+	$('#cinema').bind('pageAnimationEnd', function(e, info){
+		if (info.direction == 'out') return;
+		
+		//recupera quem chamou a janela
+		ref = $(this).data('referrer');
+		nid = ref.attr('id');
+		view.filmes_cinema(nid);
+	});
+	
+	
 	//sempre limpa a lista de cinemas quando entrar nessa tela
 	$('#cinemas').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
-		$('ul', $(this)).empty();
+		//$('ul', $(this)).empty();
 	});
 	
 	$('#home,').bind('pageAnimationEnd', function(e, info){
