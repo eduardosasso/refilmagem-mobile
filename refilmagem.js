@@ -92,6 +92,21 @@ var rfmg = {
 			});	
 	},
 	
+	get_node: function(nid, callback) {
+		var _this = this;
+
+		params = {
+			method: "node.get", 
+			nid: nid
+		}
+
+		rfmg.service_request(params, function(result) {
+			node = result.data;
+
+			callback.call(_this, node);
+		});		
+	},
+	
 	filme_cinemas: function(filme, cidade, horario, callback) {
 		var _this = this;
 		
@@ -244,6 +259,12 @@ view = {
 			});
 
 		});
+	},
+	
+	filme: function(nid) {
+			rfmg.get_node(nid, function(filme){
+				console.log(filme);
+			});
 	},
 	
 	proximas_sessoes: function() {
@@ -459,6 +480,18 @@ $(function (){
 		$('#cinema ul').empty();
 		
 		view.filmes_cinema(nid);
+	});
+	
+	$('#filme').bind('pageAnimationEnd', function(e, info){
+		if (info.direction == 'out') return;
+		
+		ref = $(this).data('referrer');
+		nid = ref.attr('id');
+		
+		$('#filme h2').text(ref.text());
+		$('#filme ul').empty();
+		
+		view.filme(nid);
 	});
 	
 	

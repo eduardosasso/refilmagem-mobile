@@ -26,14 +26,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>41</integer>
+				<integer>7</integer>
 				<key>line</key>
-				<integer>16</integer>
+				<integer>58</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
+			<integer>9</integer>
+		</dict>
+		<key>jqtouch/extensions/jqt.location.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>44</integer>
+				<key>line</key>
+				<integer>47</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
 			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>11</integer>
 		</dict>
 		<key>jqtouch/jqtouch.css</key>
 		<dict>
@@ -49,7 +63,7 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>27</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
@@ -65,34 +79,34 @@
 				<integer>20</integer>
 			</dict>
 		</dict>
-		<key>jqtouch/jqtouch.js</key>
+		<key>post.html</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>80</integer>
 				<key>line</key>
-				<integer>235</integer>
+				<integer>20</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>224</integer>
+			<integer>0</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>17</integer>
+				<integer>8</integer>
 				<key>line</key>
-				<integer>235</integer>
+				<integer>20</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>80</integer>
 				<key>line</key>
-				<integer>235</integer>
+				<integer>20</integer>
 			</dict>
 		</dict>
 		<key>refilmagem.js</key>
@@ -102,51 +116,51 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>145</integer>
+				<integer>325</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>116</integer>
+			<integer>421</integer>
 		</dict>
 		<key>temp.txt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>96</integer>
+				<integer>33</integer>
 				<key>line</key>
-				<integer>76</integer>
+				<integer>2</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>50</integer>
-			<key>selectFrom</key>
+			<integer>0</integer>
+		</dict>
+		<key>themes/apple/theme.css</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>110</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>76</integer>
+				<integer>611</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>96</integer>
-				<key>line</key>
-				<integer>76</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>584</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
+		<string>post.html</string>
 		<string>refilmagem.js</string>
+		<string>themes/apple/theme.css</string>
+		<string>jqtouch/extensions/jqt.location.js</string>
 		<string>temp.txt</string>
 		<string>jqtouch/jqtouch.css</string>
-		<string>jqtouch/jqtouch.js</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
@@ -173,6 +187,13 @@
 					<true/>
 					<key>subItems</key>
 					<dict>
+						<key>apple</key>
+						<dict>
+							<key>isExpanded</key>
+							<true/>
+							<key>subItems</key>
+							<dict/>
+						</dict>
 						<key>jqt</key>
 						<dict>
 							<key>isExpanded</key>
@@ -186,6 +207,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{0, 0}, {1436, 878}}</string>
+	<string>{{0, 0}, {1676, 1028}}</string>
 </dict>
 </plist>
