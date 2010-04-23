@@ -312,9 +312,17 @@ view = {
 			$.each(filmes, function(index, filme) {
 				nid = filme.node_node_data_field_ref_filme_nid;
 				nome = filme.node_node_data_field_ref_filme_title;
+				nome = nome.replace('(dublado)','');
 				estreia = filme.node_node_data_field_ref_filme_node_data_field_estreia_api_field_estreia_api_value;
 				pre_estreia = filme.node_node_data_field_ref_filme_node_data_field_estreia_api_field_pre_estreia_api_value;
 				poster = filme.files_node_data_field_poster_filepath;
+				lingua = filme.node_node_data_field_ref_filme__term_data_name;
+				
+				if (lingua == 'Dublado') {
+					lingua = '(dublado) ';
+				} else {
+					lingua = '';
+				}
 				
 				anchor = $('<a/>', {  
 					id: nid,
@@ -326,18 +334,31 @@ view = {
 				
 				if (estreia != null) {
 					estreias = estreia.split(",");
-					console.log(nome, estreias);
+
 					if ($.inArray(cidade, estreias) != -1) {
 						anchor_estreia = $('<a/>', {  
 							id: nid,
 						    href: '#filme',  
-						    text: '(estreia)',
+						    text: lingua + '(estreia)',
 						});
 						
 						list_item.append(anchor_estreia);
 					};
 				};
 				
+				if (pre_estreia != null) {
+					pre_estreias = pre_estreia.split(",");
+
+					if ($.inArray(cidade, pre_estreias) != -1) {
+						anchor_pre_estreia = $('<a/>', {  
+							id: nid,
+						    href: '#filme',  
+						    text: lingua + '(pre-estreia)',
+						});
+						
+						list_item.append(anchor_pre_estreia);
+					};
+				};				
 
 				$('#cinema ul').append(list_item);
 				
@@ -434,6 +455,9 @@ $(function (){
 		//recupera quem chamou a janela
 		ref = $(this).data('referrer');
 		nid = ref.attr('id');
+		$('#cinema h2').text(ref.text());
+		$('#cinema ul').empty();
+		
 		view.filmes_cinema(nid);
 	});
 	
@@ -444,7 +468,7 @@ $(function (){
 		//$('ul', $(this)).empty();
 	});
 	
-	$('#home,').bind('pageAnimationEnd', function(e, info){
+	$('#home').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
 		$('h2', $(this)).text(view.minha_cidade().nome);
 	});
