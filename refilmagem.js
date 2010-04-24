@@ -107,6 +107,52 @@ var rfmg = {
 		});		
 	},
 	
+	horarios_filme: function(movie_id_name, callback) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "horarios_filme", 
+			display_id: 'default',
+			args: [movie_id_name, cidade]
+		}
+		
+		var cinema = new Object();
+		
+		//var horarios_cinema = new Array(); 
+		
+		var horarios = new Array(); 
+		
+		var cinema_id_anterior = '';
+		
+		rfmg.service_request(params, function(result) {
+			$.each(result.data, function(index, val) {
+				cinema_id = val.node_node_data_field_ref_cinema_nid;		
+				cinema_nome = val.node_node_data_field_ref_cinema_title;
+				horario = val.node_data_field_horario_field_horario_value;
+				
+				if (cinema_id_anterior == cinema_id) {
+					cinema.horario.push(horario);
+				} else {
+					cinema = new Object();
+					cinema.id = cinema_id;
+					cinema.nome = cinema_nome;
+					cinema.horario = new Array(horario);
+					
+					horarios.push(cinema);
+				}
+				
+				cinema_id_anterior = cinema_id;
+				
+			});
+			
+			console.log(horarios);
+			
+			callback.call(_this, horarios);
+		});		
+		
+	},
+	
 	filme_cinemas: function(filme, cidade, horario, callback) {
 		var _this = this;
 		
@@ -262,9 +308,49 @@ view = {
 	},
 	
 	filme: function(nid) {
-			rfmg.get_node(nid, function(filme){
-				console.log(filme);
+		$('#poster img').remove();
+		$('#poster').addClass('loading');
+		$('#horarios').empty();
+		
+		rfmg.get_node(nid, function(filme){
+			tempo = filme.field_tempo[0].value;
+			idade = filme.field_idade[0].value;
+			trailer = filme.field_trailer[0].value;
+			site = filme.field_url[0].value;
+			movie_id_name = filme.field_movie_id_name[0].value;
+			
+			rfmg.horarios_filme(movie_id_name, function(horarios) {
+				$.each(horarios, function(index, val) {
+					
+					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).text(val.nome).appendTo('#horarios');
+					
+					div = $('div#c' + val.id).append('<ul/>');
+					
+					$.each(val.horario, function(index, horario) {
+						$('<li/>').text(horario).appendTo($('ul', div));
+					});
+				});
 			});
+			
+			$('#tempo').text(tempo);
+			
+			sinopse = filme.body;
+			
+			console.log(filme);
+			
+			poster = filme.field_poster[0].filename;
+			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
+
+			var img = new Image();
+			$(img).load(function(){
+				$(this).hide();	
+
+				$('#poster').removeClass('loading').append(this);
+
+				// fade our image in to create a nice effect
+				$(this).fadeIn();
+			}).attr('src', poster_url);
+		});
 	},
 	
 	proximas_sessoes: function() {
@@ -489,7 +575,7 @@ $(function (){
 		nid = ref.attr('id');
 		
 		$('#filme h2').text(ref.text());
-		$('#filme ul').empty();
+		$('#filme #info-filme').empty();
 		
 		view.filme(nid);
 	});
