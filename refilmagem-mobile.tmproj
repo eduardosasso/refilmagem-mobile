@@ -26,14 +26,30 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>25</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>69</integer>
+				<integer>88</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>27</integer>
+			<integer>42</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>11</integer>
+				<key>line</key>
+				<integer>88</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>25</integer>
+				<key>line</key>
+				<integer>88</integer>
+			</dict>
 		</dict>
 		<key>jqtouch/extensions/jqt.location.js</key>
 		<dict>
@@ -79,19 +95,33 @@
 				<integer>20</integer>
 			</dict>
 		</dict>
+		<key>refilmagem.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>28</integer>
+				<key>line</key>
+				<integer>1</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 		<key>refilmagem.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>16</integer>
+				<integer>46</integer>
 				<key>line</key>
-				<integer>493</integer>
+				<integer>547</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>462</integer>
+			<integer>518</integer>
 		</dict>
 		<key>temp.txt</key>
 		<dict>
@@ -121,11 +151,43 @@
 			<key>firstVisibleLine</key>
 			<integer>584</integer>
 		</dict>
+		<key>themes/jqt/theme.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>442</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>414</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>442</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>43</integer>
+				<key>line</key>
+				<integer>442</integer>
+			</dict>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
 		<string>refilmagem.js</string>
+		<string>themes/jqt/theme.css</string>
+		<string>refilmagem.css</string>
 		<string>themes/apple/theme.css</string>
 		<string>jqtouch/extensions/jqt.location.js</string>
 		<string>temp.txt</string>
@@ -176,6 +238,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{0, 0}, {1436, 878}}</string>
+	<string>{{0, 0}, {1676, 1028}}</string>
 </dict>
 </plist>

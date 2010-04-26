@@ -10,6 +10,15 @@ var rfmg = {
 		$.getJSON(_url, callback);
 	},
 	
+	nome_cidade_coords: function(lat, lon, callback){
+		query = "select locality1 from geo.places where woeid in (select place.woeid from flickr.places where lat='"+ lat +"' and lon='"+ lon +"')";
+		
+		var encodedQuery = encodeURIComponent(query.toLowerCase()),
+		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
+
+		$.getJSON(_url, callback);
+	},
+	
 	service_request: function(data, callback) {
 		url = rfmg.url + "/services/json/";
 		
@@ -605,8 +614,6 @@ var jqt = new $.jQTouch({
 // Pega a localizacao do usuario e define latitudo, longitude e cidade. 
 // Tem q validar se vem de uma cidade nao atendida.
 var init = function(){
-	geo_meta_url = "http://maps.google.com/maps/geo?sensor=false&q=";
-	
 	//arteplex
 	// localizacao = '-30.02167427,-51.16154187';
 	
@@ -614,23 +621,28 @@ var init = function(){
 	
 	jqt.updateLocation(function(geo){
         if (geo) {
+			// geo.latitude = '37.331689';
+			// geo.longitude = '-122.030731';
+			
 			latlong = geo.latitude + ',' + geo.longitude;
 			
-			geo_meta_url += latlong;
-			
-			rfmg.request(geo_meta_url,function(meta){
-				cidade = meta.query.results.json.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
+			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(data){
+				cidade = data.query.results.place.locality1.content;
 				
 				rfmg.cidade_meta(cidade,function(metadata){
+					//se vier vazio eh pq a cidade no geo nao eh atendida pelo site
+					if (metadata === undefined) {
+						cidade_id = '231';
+						cidade = 'São Paulo';
+					} else {
+						cidade_id = metadata.tid;
+					}
 
 					$('#home ul').show();
 					$('#home h2').text(cidade);
 
-					/*
-						TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
-					*/
-					view.set_minha_localizacao(latlong, metadata.tid);
-					
+					view.set_minha_localizacao(latlong, cidade_id);
+
 					$('#home ul li a').click(function(e){
 						id = $(this).attr('href');
 
@@ -650,7 +662,41 @@ var init = function(){
 					});
 				});
 				
-			})			
+			});
+			
+			// rfmg.request(geo_meta_url,function(meta){
+			// 				cidade = meta.query.results.json.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
+			// 				
+			// 				rfmg.cidade_meta(cidade,function(metadata){
+			// 
+			// 					$('#home ul').show();
+			// 					$('#home h2').text(cidade);
+			// 
+			// 					/*
+			// 						TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
+			// 					*/
+			// 					view.set_minha_localizacao(latlong, metadata.tid);
+			// 					
+			// 					$('#home ul li a').click(function(e){
+			// 						id = $(this).attr('href');
+			// 
+			// 						switch (id) {
+			// 							case '#cidades': 
+			// 							view.cidades();
+			// 							break;
+			// 
+			// 							case '#cinemas': 
+			// 							view.cinemas();
+			// 							break;	
+			// 
+			// 							case '#proximas-sessoes': 
+			// 							view.proximas_sessoes();
+			// 							break;	
+			// 						}
+			// 					});
+			// 				});
+			// 				
+			// 			})			
         } else {
 			$('#cinemas h2').text('Localização desconhecida');
         }
