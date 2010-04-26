@@ -332,11 +332,23 @@ view = {
 				});
 			});
 			
+			$.each(filme.taxonomy, function(index, val) {
+				if (val.vid == 7) {
+					genero = val.name;
+				}else if (val.vid == 6) {
+					lingua = val.name;
+				};				
+			});
+			
+			$('#detalhes').text(lingua + ' ' + genero);
+			
 			$('#tempo').text(tempo);
 			
 			sinopse = filme.body;
 			
 			console.log(filme);
+			
+			$('#sinopse').text(view.strip_html(sinopse));
 			
 			poster = filme.field_poster[0].filename;
 			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
@@ -351,6 +363,10 @@ view = {
 				$(this).fadeIn();
 			}).attr('src', poster_url);
 		});
+	},
+	
+	strip_html: function(string) { 
+	    return string.replace(/<(.|\n)*?>/g, ''); 
 	},
 	
 	proximas_sessoes: function() {
