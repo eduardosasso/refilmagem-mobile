@@ -107,7 +107,58 @@ var rfmg = {
 		});		
 	},
 	
-	horarios_filme: function(movie_id_name, callback) {
+	filmes_em_cartaz: function(callback) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "frontpage", 
+			display_id: 'block_1',
+			args: [cidade]
+		}
+		
+		rfmg.service_request(params, function(result) {
+			filmes = result.data;
+
+			callback.call(_this, filmes);
+		});		
+	},
+	
+	estreias_da_semana: function(cidade, callback) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "frontpage", 
+			display_id: 'default',
+			args: [cidade,cidade]
+		}
+		
+		rfmg.service_request(params, function(result) {
+			filmes = result.data;
+
+			callback.call(_this, filmes);
+		});		
+	},
+	
+	filmes_em_cartaz: function(cidade, callback) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "frontpage", 
+			display_id: 'default',
+			args: [cidade]
+		}
+		
+		rfmg.service_request(params, function(result) {
+			filmes = result.data;
+
+			callback.call(_this, filmes);
+		});		
+	},
+	
+	horarios_filme: function(movie_id_name, cidade, callback) {
 		var _this = this;
 		
 		params = {
@@ -319,7 +370,7 @@ view = {
 			site = filme.field_url[0].value;
 			movie_id_name = filme.field_movie_id_name[0].value;
 			
-			rfmg.horarios_filme(movie_id_name, function(horarios) {
+			rfmg.horarios_filme(movie_id_name, cidade, function(horarios) {
 				$.each(horarios, function(index, val) {
 					
 					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).text(val.nome).appendTo('#horarios');
@@ -488,6 +539,44 @@ view = {
 			});
 		})
 	},
+	
+	filmes_em_cartaz: function(){
+		rfmg.estreias_da_semana(cidade,function(estreias){
+			if (estreias.length == 0) {
+				$('#estreias_label, #lista_estreias').hide();
+			} else {
+				$('#estreias_label, #lista_estreias').show();
+			}
+			
+			$.each(estreias, function(index, estreia) {
+				anchor = $('<a/>', {  
+					id: estreia.node_node_data_field_ref_filme_nid,
+				    href: '#filme',  
+				    text: estreia.node_node_data_field_ref_filme_title,
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+				$('#lista_estreias').append(list_item);
+			});
+
+		});
+		
+		rfmg.filmes_em_cartaz(cidade,function(filmes){
+						console.log('cartaz',filmes);
+			$.each(filmes, function(index, filme) {
+				anchor = $('<a/>', {  
+					id: filme.node_node_data_field_ref_filme_nid,
+				    href: '#filme',  
+				    text: filme.node_node_data_field_ref_filme_title,
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+				$('#lista_filmes_em_cartaz').append(list_item);
+			});
+		});
+	},
 
 	cinemas: function(){
 		rfmg.cinemas(cidade,function(cinemas){
@@ -596,6 +685,12 @@ $(function (){
 		view.filme(nid);
 	});
 	
+	$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
+		if (info.direction == 'out') return;
+		
+		view.filmes_em_cartaz();
+		
+	});
 	
 	//sempre limpa a lista de cinemas quando entrar nessa tela
 	$('#cinemas').bind('pageAnimationEnd', function(e, info){
