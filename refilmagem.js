@@ -1,3 +1,5 @@
+document.write('<style type="text/css">body{display:none}</style>');
+
 String.prototype.trunc = function(n){
 	return this.substr(0,n-1)+(this.length>n?' <a href="#" id="sinopse_completa">...Mais</a>':'');
 };
@@ -189,6 +191,8 @@ var rfmg = {
 	},
 	
 	horarios_filme: function(movie_id_name, cidade, callback) {
+		console.log(movie_id_name);
+		console.log(cidade);
 		var _this = this;
 		
 		params = {
@@ -348,11 +352,24 @@ view = {
 		}
 	},
 	
+	grava_cache: function(name){
+		if ($('body').data(name)) {
+			return true;
+		}
+		
+		$('body').data(name, true);
+	},
+	
+	limpa_cache: function(name){
+		$('body').data(name, false);
+	},
+	
 	cidades: function(){
-		//so carrega uma vez
-		if ($(this).data('loaded')) return;
-
-		$(this).data('loaded', true);	
+		view.loaderVisible(true);
+		if (view.grava_cache('cidades')) {
+	        view.loaderVisible(false);
+			return;
+		}
 		
 		rfmg.cidades(function(cidades){
 			var ativo ='';
@@ -372,6 +389,8 @@ view = {
 
 				$('#cidades ul').append(list_item);				
 			});
+			
+			view.loaderVisible(false);
 
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
@@ -382,16 +401,23 @@ view = {
 				cidade_id = $(this).attr('id');
 				nome = $(this).text();
 				
-				view.set_minha_cidade(cidade_id,nome);				
+				view.set_minha_cidade(cidade_id,nome);
+				
+				view.limpa_cache('cinemas');
+				view.limpa_cache('cinema');
+				view.limpa_cache('filmes-em-cartaz');				
 			});
 
 		});
 	},
 	
 	filme: function(nid) {
+		view.loaderVisible(true);
+		
 		$('#poster img').remove();
 		$('#poster').addClass('loading');
-		$('#horarios').empty();
+
+		$('#horarios, #sinopse, #resto_sinopse, #estrelas').empty();
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
@@ -452,6 +478,7 @@ view = {
 					
 					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
 				});
+				view.loaderVisible(false);
 			});
 			
 			$('#titulo_original').remove('p').append('<p/>').html(titulo_original);
@@ -485,7 +512,8 @@ view = {
 	
 	proximas_sessoes: function() {
 		$('#proximas-sessoes ul').empty();
-		
+        view.loaderVisible(true);
+
 		rfmg.proximas_sessoes(cidade,function(sessoes){
 			$.each(sessoes, function(i,item) {
 				sessao = item.hora + " › " + item.title;
@@ -494,13 +522,14 @@ view = {
 				anchor = $('<a/>', {  
 					id: item.nid,
 					alt: item.hora,
-				    href: '#cinemas',  
+				    href: '#filme',  
 				    text: sessao
 				});
 
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
 				
 				$('#proximas-sessoes ul').append(list_item);
+		        view.loaderVisible(false);
 			});
 			
 			$('#proximas-sessoes ul li a').click(function(){
@@ -604,44 +633,76 @@ view = {
 	},
 	
 	filmes_em_cartaz: function(){
+        view.loaderVisible(true);
+		if (view.grava_cache('filmes_em_cartaz')) {
+	        view.loaderVisible(false);
+			return;
+		}
+
+		$('#filmes-em-cartaz ul').empty();
+		finalizou = 0;
+		var items_estreias = [];		
 		rfmg.estreias_da_semana(cidade,function(estreias){
 			if (estreias.length == 0) {
 				$('#estreias_label, #lista_estreias').hide();
 			} else {
 				$('#estreias_label, #lista_estreias').show();
-			}
-			
-			$.each(estreias, function(index, estreia) {
-				anchor = $('<a/>', {  
-					id: estreia.node_node_data_field_ref_filme_nid,
-				    href: '#filme',  
-				    text: estreia.node_node_data_field_ref_filme_title,
+
+				$.each(estreias, function(index, estreia) {
+					anchor = $('<a/>', {  
+						id: estreia.node_node_data_field_ref_filme_nid,
+						href: '#filme',  
+						text: estreia.node_node_data_field_ref_filme_title,
+					});
+
+					list_item = $('<li/>').attr('class','arrow').append(anchor);
+					items_estreias.push(list_item);
 				});
-
-				list_item = $('<li/>').attr('class','arrow').append(anchor);
-
-				$('#lista_estreias').append(list_item);
-			});
-
+				$.fn.append.apply($('#lista_estreias'), items_estreias);
+				//$('#lista_estreias').append(list_item);
+				finalizou++;
+				if (finalizou == 2) {
+					view.loaderVisible(false);
+				};
+				
+			}
 		});
 		
+		var items = [];
+
 		rfmg.filmes_em_cartaz(cidade,function(filmes){
-						console.log('cartaz',filmes);
 			$.each(filmes, function(index, filme) {
 				anchor = $('<a/>', {  
 					id: filme.node_node_data_field_ref_filme_nid,
 				    href: '#filme',  
 				    text: filme.node_node_data_field_ref_filme_title,
 				});
-
+				
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
-
-				$('#lista_filmes_em_cartaz').append(list_item);
+				
+				items.push(list_item);
 			});
+			
+			$.fn.append.apply( $('#lista_filmes_em_cartaz'), items);
+			finalizou++;
+			
+			if (finalizou == 2) {
+				view.loaderVisible(false);
+			};
+			
+			//$('#lista_filmes_em_cartaz').append('<li>sss</li>');
 		});
 	},
 
 	cinemas: function(){
+        view.loaderVisible(true);
+		if (view.grava_cache('cinemas')) {
+	        view.loaderVisible(false);
+			return;
+		}
+		$('#cinemas ul').empty();
+		
+		var items = [];
 		rfmg.cinemas(cidade,function(cinemas){
 			rfmg.ordena_por_proximidade(cinemas, 'endereco', onde_estou, function(data){
 				$.each(data, function(index, cinema) {
@@ -652,17 +713,29 @@ view = {
 					});
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
-
-					$('#cinemas ul').append(list_item);
-				});
-			});
-			
+					items.push(list_item);
+				});				
+				$.fn.append.apply( $('#cinemas ul'), items);
+				//$('#cinemas ul').append(list_item);
+		        view.loaderVisible(false);				
+			});			
 		});		
 	},
+	
+	loaderVisible: function (visible) {
+        if (visible) {
+            $('#loader').css({
+                'display': 'block'
+            });
+        } else {
+            $('#loader').css('display', 'none');
+        }
+    },
 }
 
 var jqt = new $.jQTouch({
 	useFastTouch: false,
+    statusBar: 'black-translucent',
 });
 
 // Pega a localizacao do usuario e define latitudo, longitude e cidade. 
@@ -730,6 +803,8 @@ var init = function(){
 
 $(function (){
 	init();
+	
+	$('body').css('display','block');
 	
 	$('#cinema').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;

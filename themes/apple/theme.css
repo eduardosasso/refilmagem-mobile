@@ -1,13 +1,25 @@
 /* @override themes/apple/theme.css -- http://m.refilmagem.com.br/themes/apple/theme.css */
 
 body {
-    background: rgb(0,0,0);
-}
-
-body > * {
     background: #EDEDED url(img/bg_stripes2.png) left top repeat;
 }
 
+body > * {
+
+}
+span.home {
+	display: block;
+	width: 15px;
+	text-indent: -9000px;
+	background: url(img/icon_home.png) center 7px no-repeat;
+}
+
+span.about {
+	display: block;
+	width: 16px;
+	text-indent: -9000px;
+	background: url(img/icon_info5.png) center 7px no-repeat;
+}
 h1, h2, h3{
     font: bold 16px Helvetica;
     text-shadow: 2px 2px 1px #222;
