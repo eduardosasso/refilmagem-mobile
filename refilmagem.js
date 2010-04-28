@@ -417,7 +417,8 @@ view = {
 		$('#poster img').remove();
 		$('#poster').addClass('loading');
 
-		$('#horarios, #sinopse, #resto_sinopse, #estrelas').empty();
+		$('#horarios, #sinopse, #resto_sinopse, #estrelas, #detalhes p').empty();
+		$('#titulo_original, #tempo, #classificacao, #genero, #formato').hide();
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
@@ -466,14 +467,21 @@ view = {
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
 					
-					ul_cinema = $('<ul/>').addClass('nome_cinema').append(list_item);
+					ul_cinema = $('<ul/>').addClass('rounded nome_cinema').append(list_item);
 					
 					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).append(ul_cinema).appendTo('#horarios');
 					
 					div = $('div#c' + val.id).append('<ul class="horarios_cinema"/>');
 					
 					$.each(val.horario, function(index, horario) {
-						$('<li/>').addClass('movie_started').text(horario).appendTo($('ul:last', div));
+						horafilme = new Date (new Date().toDateString() + ' ' + horario);
+						hora = new Date();
+
+						if (hora >= horafilme) {
+							$('<li/>').addClass('movie_started').text(horario).appendTo($('ul:last', div));
+						} else {
+							$('<li/>').text(horario).appendTo($('ul:last', div));
+						}
 					});
 					
 					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
@@ -481,11 +489,11 @@ view = {
 				view.loaderVisible(false);
 			});
 			
-			$('#titulo_original').remove('p').append('<p/>').html(titulo_original);
-			$('#tempo').append('<p/>').html(tempo);
-			$('#classificacao').append(idade);
-			$('#genero').append(genero);
-			$('#formato').append(lingua);
+			//$('#titulo_original').html(titulo_original);
+			if (tempo) $('#tempo p').html(tempo).parent().show();
+			if (idade) $('#classificacao p').html(idade).parent().show();
+			if (genero) $('#genero p').html(genero).parent().show();
+			if (lingua) $('#formato p').html(lingua).parent().show();
 			
 			$('#sinopse').html(sinopse);
 			
@@ -500,7 +508,6 @@ view = {
 
 				$('#poster').removeClass('loading').append(this);
 
-				// fade our image in to create a nice effect
 				$(this).fadeIn();
 			}).attr('src', poster_url);
 		});
@@ -531,45 +538,6 @@ view = {
 				$('#proximas-sessoes ul').append(list_item);
 		        view.loaderVisible(false);
 			});
-			
-			$('#proximas-sessoes ul li a').click(function(){
-				filme = $(this).attr('id');
-				hora = $(this).attr('alt');
-				
-				rfmg.filme_cinemas(filme, cidade, hora, function(cinemas){					
-					if (cinemas.length == 1) {
-						cinema = cinemas[0];
-						
-						anchor = $('<a/>', {  
-							id: cinema.node_node_data_field_ref_cinema_nid,
-						    href: '#cinema',  
-						    text: cinema.node_node_data_field_ref_cinema_title,
-						});
-
-						list_item = $('<li/>').attr('class','arrow').append(anchor);
-						
-						$('#cinemas ul').append(list_item);
-						
-					} else {
-						endereco = 'node_node_data_field_ref_cinema__node_revisions_body';
-						
-						rfmg.ordena_por_proximidade(cinemas, endereco, onde_estou, function(data){
-							$.each(data, function(index, cinema) {
-								anchor = $('<a/>', {  
-									id: cinema.node_node_data_field_ref_cinema_nid,
-								    href: '#cinema',  
-								    text: cinema.node_node_data_field_ref_cinema_title,
-								});
-
-								list_item = $('<li/>').attr('class','arrow').append(anchor);
-
-								$('#cinemas ul').append(list_item);
-							});
-						});
-					}
-				});
-			});
-			
 		});
 	},
 	
@@ -806,7 +774,13 @@ $(function (){
 	
 	$('body').css('display','block');
 	
+	$('#proximas-sessoes ul').click(function(){
+		//view.loaderVisible(true);
+	});
+	
 	$('#cinema').bind('pageAnimationEnd', function(e, info){
+		console.log('cinema');
+		
 		if (info.direction == 'out') return;
 		
 		//recupera quem chamou a janela
@@ -825,7 +799,6 @@ $(function (){
 		nid = ref.attr('id');
 		
 		$('#filme h2').text(ref.text());
-		$('#filme #info-filme').empty();
 		
 		view.filme(nid);
 	});
