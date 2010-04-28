@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <title>Refilmagem</title>
 		<style type="text/css" media="screen">@import "jqtouch/jqtouch.min.css";</style>
-        <style type="text/css" media="screen">@import "themes/apple/theme.min.css";</style>
+        <style type="text/css" media="screen">@import "themes/apple/theme.css";</style>
         <style type="text/css" media="screen">@import "refilmagem.css";</style>
         <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         <script src="jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>        
@@ -15,16 +15,21 @@
 		<div id="home">
 			<div class="toolbar">
                 <h1>Refilmagem</h1>
+                <a class="button flip" href="#about"><span class="about">About</span></a>
             </div>
 			<h2></h2>
             <ul class="rounded">
-            	<li class="arrow"><a href="#cidades">Cidades</a></li>
-            	<li class="arrow"><a href="#cinemas">Cinemas</a></li>
-            	<li class="arrow"><a href="#proximas-sessoes">Próximas Sessões</a></li>
+				<li class="arrow"><a href="#filmes-em-cartaz"><span class="filmes-cartaz">Filmes em Cartaz</span></a></li>
+				<li class="arrow"><a href="#proximas-sessoes"><span class="proximas-sessoes">Próximas Sessões</span></a></li>
+            	<li class="arrow"><a href="#cinemas"><span class="cinemas">Cinemas</span></a></li>            	
             </ul>
 			<ul>
-				<li class="arrow"><a href="#filmes-em-cartaz">Filmes em Cartaz</a></li>
+				<li class="arrow"><a href="#cidades"><span class="outras-cidades">Outras Cidades</span></a></li>
 			</ul>			
+		</div>
+		
+		<div id="about">
+			ssss
 		</div>
 		
         <div id="cidades">
@@ -71,11 +76,33 @@
                 <a class="button" href="#home">Home</a>
             </div>
 			<h2></h2>
-			<div id="poster"></div>
-			<div id="detalhes"></div>
-			<div id="sinopse"></div>
-			<div id="sinopse"></div>
-			<div id="tempo"></div>
+			<div class="txt_filme">
+				<div id="poster"></div>
+				<div id="detalhes">
+					<div id="estrelas"></div>
+					<div id="titulo_original">
+						<span class="meta-label">Título original:</span>
+					</div>
+					<div id="tempo">
+						<span class="meta-label">Duração:</span>
+					</div>
+					<div id="classificacao">
+						<span class="meta-label">Classificação:</span>
+					</div>
+					<div id="genero">
+						<span class="meta-label">Gênero:</span>
+					</div>
+					<div id="formato">
+						<span class="meta-label">Formato:</span>
+					</div>
+				</div>			
+				<div id="sinopse">
+					
+				</div>
+				<div id="resto_sinopse"></div>
+				<div class="clear"> </div>
+			</div>
+			<h3>Onde está passando:</h3>
 			<div id="horarios"></div>
         </div>
 
@@ -90,8 +117,6 @@
 			
 			<h2>Filmes em cartaz</h2>
 			<ul id="lista_filmes_em_cartaz"></ul>
-			
 		</div>
-
     </body>
 </html>

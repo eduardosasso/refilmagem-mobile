@@ -1,3 +1,7 @@
+String.prototype.trunc = function(n){
+	return this.substr(0,n-1)+(this.length>n?' <a href="#" id="sinopse_completa">...Mais</a>':'');
+};
+
 var rfmg = {
 	url : "http://beta.refilmagem.com.br",
 
@@ -114,6 +118,23 @@ var rfmg = {
 
 			callback.call(_this, node);
 		});		
+	},
+	
+	filme: function(nid, callback) {
+		var _this = this;
+		
+		params = {
+			method: "views.get", 
+			view_name: "filme", 
+			display_id: 'default',
+			args: [nid]
+		}
+		
+		rfmg.service_request(params, function(result) {
+			filmes = result.data;
+
+			callback.call(_this, filmes);
+		});
 	},
 	
 	filmes_em_cartaz: function(callback) {
@@ -372,46 +393,79 @@ view = {
 		$('#poster').addClass('loading');
 		$('#horarios').empty();
 		
-		rfmg.get_node(nid, function(filme){
-			tempo = filme.field_tempo[0].value;
-			idade = filme.field_idade[0].value;
-			trailer = filme.field_trailer[0].value;
-			site = filme.field_url[0].value;
-			movie_id_name = filme.field_movie_id_name[0].value;
+		rfmg.filme(nid, function(filme){
+			filme = filme[0];
+
+			tempo = filme.node_data_field_idade_field_tempo_value;
+			idade = filme.node_data_field_idade_field_idade_value;
+			trailer = filme.node_data_field_trailer_field_trailer_value;
+			pre_estreia = filme.node_data_field_idade_field_pre_estreia_api_value;
+			estreia = filme.node_data_field_idade_field_estreia_api_value;
+			titulo_original = filme.node_data_field_idade_field_original_title_value;
+			site = filme.node_data_field_url_field_url_value;
+			movie_id_name = filme.node_data_field_idade_field_movie_id_name_value;
+			lingua = filme.term_data_node_1_name;
+			genero = filme.term_data_node_name;
+			estrelas = filme.votingapi_cache_node_percent_vote_average_value;
+			sinopse = view.strip_html(filme.node_revisions_body);
+			sinopse_full = sinopse;
+			sinopse = sinopse.trunc(120);
+			poster = filme.files_node_data_field_poster_filepath;
+			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
+			
+			//faz as estrelas
+			for (var i=0; i < 5; i++) {
+				estrela = $('<div/>').css('width', '0%');
+				
+				if (estrelas >= 20) {
+					estrela.css('width', '100%');
+				} else if (estrelas > 0) {
+					estrela.css('width', (100 - estrelas) + '%');
+				}
+				
+				estrela = $('<div/>').addClass('estrela').append(estrela);
+				$('#estrelas').append(estrela);
+				
+				estrelas = (estrelas - 20);
+			};
 			
 			rfmg.horarios_filme(movie_id_name, cidade, function(horarios) {
 				$.each(horarios, function(index, val) {
 					
-					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).text(val.nome).appendTo('#horarios');
+					anchor = $('<a/>', {  
+						id: val.id,
+					    href: '#cinema',  
+					    text: val.nome
+					});
+
+					list_item = $('<li/>').attr('class','arrow').append(anchor);
 					
-					div = $('div#c' + val.id).append('<ul/>');
+					ul_cinema = $('<ul/>').addClass('nome_cinema').append(list_item);
+					
+					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).append(ul_cinema).appendTo('#horarios');
+					
+					div = $('div#c' + val.id).append('<ul class="horarios_cinema"/>');
 					
 					$.each(val.horario, function(index, horario) {
-						$('<li/>').text(horario).appendTo($('ul', div));
+						$('<li/>').addClass('movie_started').text(horario).appendTo($('ul:last', div));
 					});
+					
+					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
 				});
 			});
 			
-			$.each(filme.taxonomy, function(index, val) {
-				if (val.vid == 7) {
-					genero = val.name;
-				}else if (val.vid == 6) {
-					lingua = val.name;
-				};				
+			$('#titulo_original').remove('p').append('<p/>').html(titulo_original);
+			$('#tempo').append('<p/>').html(tempo);
+			$('#classificacao').append(idade);
+			$('#genero').append(genero);
+			$('#formato').append(lingua);
+			
+			$('#sinopse').html(sinopse);
+			
+			$('#sinopse_completa').click(function(){
+				$('#sinopse').html(sinopse_full);
+				return false;
 			});
-			
-			$('#detalhes').text(lingua + ' ' + genero);
-			
-			$('#tempo').text(tempo);
-			
-			sinopse = filme.body;
-			
-			console.log(filme);
-			
-			$('#sinopse').text(view.strip_html(sinopse));
-			
-			poster = filme.field_poster[0].filename;
-			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
 
 			var img = new Image();
 			$(img).load(function(){
@@ -613,16 +667,20 @@ var jqt = new $.jQTouch({
 
 // Pega a localizacao do usuario e define latitudo, longitude e cidade. 
 // Tem q validar se vem de uma cidade nao atendida.
+var geo = {
+	latitude: '0',
+	longitude: '0',
+};
 var init = function(){
 	//arteplex
 	// localizacao = '-30.02167427,-51.16154187';
 	
 	$('#home ul').hide();
 	
-	jqt.updateLocation(function(geo){
-        if (geo) {
-			// geo.latitude = '37.331689';
-			// geo.longitude = '-122.030731';
+//	jqt.updateLocation(function(geo){
+        //if (geo) {
+			geo.latitude = '37.331689';
+			geo.longitude = '-122.030731';
 			
 			latlong = geo.latitude + ',' + geo.longitude;
 			
@@ -663,44 +721,10 @@ var init = function(){
 				});
 				
 			});
-			
-			// rfmg.request(geo_meta_url,function(meta){
-			// 				cidade = meta.query.results.json.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
-			// 				
-			// 				rfmg.cidade_meta(cidade,function(metadata){
-			// 
-			// 					$('#home ul').show();
-			// 					$('#home h2').text(cidade);
-			// 
-			// 					/*
-			// 						TODO tem q testar quando nao acha o tid, ou seja cidade nao atendida
-			// 					*/
-			// 					view.set_minha_localizacao(latlong, metadata.tid);
-			// 					
-			// 					$('#home ul li a').click(function(e){
-			// 						id = $(this).attr('href');
-			// 
-			// 						switch (id) {
-			// 							case '#cidades': 
-			// 							view.cidades();
-			// 							break;
-			// 
-			// 							case '#cinemas': 
-			// 							view.cinemas();
-			// 							break;	
-			// 
-			// 							case '#proximas-sessoes': 
-			// 							view.proximas_sessoes();
-			// 							break;	
-			// 						}
-			// 					});
-			// 				});
-			// 				
-			// 			})			
-        } else {
-			$('#cinemas h2').text('Localização desconhecida');
-        }
-    });
+        // } else {
+        // 			$('#cinemas h2').text('Localização desconhecida');
+        //         }
+//    });
 	
 }
 

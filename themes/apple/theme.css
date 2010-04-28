@@ -1,27 +1,41 @@
+/* @override themes/apple/theme.css -- http://m.refilmagem.com.br/themes/apple/theme.css */
+
 body {
     background: rgb(0,0,0);
 }
 
 body > * {
-    background: rgb(197,204,211) url(img/pinstripes.png);
+    background: #EDEDED url(img/bg_stripes2.png) left top repeat;
 }
 
-h1, h2 {
-    font: bold 18px Helvetica;
-    text-shadow: rgba(255,255,255,.2) 0 1px 1px;
-    color: rgb(76, 86, 108);
-    margin: 10px 20px 6px;
+h1, h2, h3{
+    font: bold 16px Helvetica;
+    text-shadow: 2px 2px 1px #222;
+    color: #FFF;
+    margin: 12px 20px 12px;
 }
-
+#home h2{
+	line-height: 22px;
+	font-size: 18px;
+	background: url(img/pin_cidade.png) left center no-repeat;
+	padding-left: 24px;
+}
+#filme h2 {
+	line-height: 22px;
+	font-size: 18px;
+}
+.clear {
+	clear: both;
+}
 /* @group Toolbar */
 
 .toolbar {
-    -webkit-box-sizing: border-box;
-    border-bottom: 1px solid #2d3642;
+    
     padding: 10px;
-    height: 45px;
-    background: url(img/toolbar.png) #6d84a2 repeat-x;
+    height: 24px;
+    background: url(img/bg_header.jpg) left bottom repeat-x;
     position: relative;
+    border: none;
 }
 
 .black-translucent .toolbar {
@@ -32,7 +46,7 @@ h1, h2 {
     position: absolute;
     overflow: hidden;
     left: 50%;
-    top: 10px;
+    top: 11px;
     line-height: 1em;
     margin: 1px 0 0 -75px;
     height: 40px;
@@ -44,6 +58,9 @@ h1, h2 {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: #fff;
+    background: url(img/icon_refilmagem.png) center top no-repeat;
+    text-indent: -9000px;
+    margin-top: -2px;
 }
 
 body.landscape .toolbar > h1 {
@@ -57,7 +74,7 @@ body.landscape .toolbar > h1 {
     top: 8px;
     right: 6px;
     margin: 0;
-    border-width: 0 5px;
+    border-width: 0px 5px;
     padding: 0 3px;
     width: auto;
     height: 30px;
@@ -70,14 +87,17 @@ body.landscape .toolbar > h1 {
     text-overflow: ellipsis;
     text-decoration: none;
     white-space: nowrap;
-    background: none;
+    background: none !important;
+    -moz-border-image: url(img/toolButton.png) 0 5 0 5;
     -webkit-border-image: url(img/toolButton.png) 0 5 0 5;
 }
-
-.button.active, .back.active, .cancel.active, .add.active {
-    -webkit-border-image: url(img/toolButton.png) 0 5 0 5;	
+.button:hover, .cancel:hover, .add:hover {
+    -webkit-border-image: url(img/toolButton_hover.png) 0 5 0 5;
 }
-
+.button:active, .cancel:active, .add:active,
+.button.active, .cancel.active, .add.active {
+    -webkit-border-image: url(img/toolButton_active.png) 0 5 0 5;	
+}
 .blueButton {
     -webkit-border-image: url(img/blueButton.png) 0 5 0 5;
     border-width: 0 5px;
@@ -90,6 +110,14 @@ body.landscape .toolbar > h1 {
     max-width: 55px;
     border-width: 0 8px 0 14px;
     -webkit-border-image: url(img/backButton.png) 0 8 0 14;
+     -moz-border-image: url(img/backButton.png) 0 8 0 14;
+}
+.back:active {
+	 -webkit-border-image: url(img/backButton_active.png) 0 8 0 14 !important;
+}
+
+.back:hover {
+	 -webkit-border-image: url(img/backButton_hover.png) 0 8 0 14;
 }
 
 .leftButton, .cancel {
@@ -133,22 +161,216 @@ h1 + ul, h2 + ul, h3 + ul, h4 + ul, h5 + ul, h6 + ul {
     margin-top: 0;
 }
 
-ul {
-    color: black;
+/*** FILME ***/
+.txt_filme,
+#horarios {
+    color: #333;
     background: #fff;
-    border: 1px solid #B4B4B4;
-    font: bold 17px Helvetica;
+    font: 11px Helvetica;
+    line-height: 15px;
+    padding:10px;
+    margin: 12px 10px 17px 10px;
+    -webkit-border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 2px #000;
+}
+#horarios {
+	padding: 8px 0 10px;
+	line-height: 26px;
+}
+.txt_filme #detalhes {
+	font-weight: bold;
+	border-bottom: 1px solid #e8e8e8;
+	padding-bottom: 10px;
+	margin-left: 130px;
+	font-size: 11px;
+	line-height: 17px;
+}
+.txt_filme #detalhes div {
+	margin-right: 8px;
+}
+
+/* stars */
+.txt_filme #detalhes #estrelas{
+	margin: 0;
+	width: 75px;
+	height: 16px;
+	float: right;
+}
+.txt_filme #detalhes #estrelas .estrela{
+	width: 12px;
+	height: 12px;
+	display: block;
+	background: url(img/star2.png) !important;
+	float: left;
+	margin: 0 0 0 2px;
+}
+.txt_filme #detalhes #estrelas .estrela div{
+	height: 12px;
+	display: block;
+	background: url(img/star2.png) left 24px;
+}
+#titulo_original span{
+	display: block;
+}
+
+#titulo_original{
+	display: none;
+	margin-bottom: 0px;
+	float: none !important;
+	color: #999;
+}
+.txt_filme #detalhes .meta-label{
+	font-weight: normal;
+	
+}
+.txt_filme h2 {
+	color: #333;
+	font-size: 16px;
+	margin: 0;
+	text-shadow: none;
+}
+.txt_filme #poster{
+	float: left;
+	width: 121px;
+	height: 175px;
+	border: none;
+	margin: 0 10px 10px -3px;
+	background: url(img/bg_shadow.png) !important;
+	padding: 4px 0 0 5px;
+}
+.txt_filme #poster img{
+	width: 115px;
+	height: 165px;
+}
+.txt_filme #sinopse {
+	margin: 10px 0;
+	font-size: 13px;
+	line-height: 17px;
+}
+.txt_filme #sinopse a:link,
+.txt_filme #sinopse a:active,
+.txt_filme #sinopse a:visited {
+	color: #333;
+	font-weight: bold;
+}
+.txt_filme #sinopse a:hover {
+	text-decoration: none;
+}
+#filme .cinema {
+	padding: 0;
+	font-size: 12px;
+	font-weight: bold;
+}
+#filme ul.nome_cinema {
+    margin: 0px;
+    -webkit-border-radius: 0px;
+    -webkit-box-shadow: none;
+	font-size: 12px;
+}
+#filme ul.nome_cinema li,
+#filme ul.nome_cinema li a {
+	padding-bottom: 11px !important;
+	padding-top: 11px !important;
+	font-size: 14px;
+}
+#filme ul.nome_cinema a.active {
+	-webkit-border-radius: 0px !important;
+}
+#filme ul.horarios_cinema {
+	padding: 0px 0 6px 10px;
+    margin: 0px;
+    -webkit-border-radius: 0px;
+    -webkit-box-shadow: none;
+    border-bottom:  1px solid #D9D9D9;
+	background: #f6f6f6;
+}
+
+#filme ul.horarios_cinema li{
+	border-top:0;
+    list-style-type: none;
+    padding: 0 6px !important;
+    display: block;
+    float: left;
+    font-size: 12px;   
+    font-weight: bold;
+    margin: 8px 10px 0px 0px; 
+    -webkit-border-radius:3px !important;
+    line-height: 18px;
+    background: url(img/bg_time.jpg);
+    height: 17px;
+    color: #333;
+    text-shadow: 0 1px 0 #FFF;
+    -webkit-box-shadow: 0px 1px 2px #666;
+}
+
+#filme ul.horarios_cinema li.movie_started{
+	border-top:0;
+    list-style-type: none;
+    padding: 0 6px !important;
+    display: block;
+    float: left;
+    font-size: 12px;   
+    font-weight: x;
+    margin: 8px 10px 0px 0px; 
+    -webkit-border-radius:3px !important;
+    line-height: 18px;
+    background: #fafafa;
+    height: 17px;
+    color: #CCC;
+    text-shadow: 0 1px 0 #FFF;
+    -webkit-box-shadow: 0px 1px 0px #FFF;
+}
+
+#filme ul.horarios_cinema li.clear {
+	display: block !important;
+	clear: both !important;
+	height: 1px;
+	 -webkit-box-shadow: none !important;
+	float: none;
+	line-height: 1px;
+	border: none !important;
+	background: none !important;
+	margin-bottom: 2px !important;
+	text-indent: -9000px;
+}
+ul {
+    color: #333;
+    background: #fff;
+    font: bold 15px Helvetica;
     padding: 0;
     margin: 15px 10px 17px 10px;
     -webkit-border-radius: 8px;
+    -webkit-box-shadow: 0px 0px 3px #000;
 }
 
 ul li {
     color: #666;
-    border-top: 1px solid #B4B4B4;
+    border-top: 1px solid #D9D9D9;
     list-style-type: none;
     padding: 10px 10px 10px 10px;
 }
+ul li span {
+	display: block;
+	height: 18px;
+	line-height: 19px;
+	padding-left: 24px;
+}
+ul li span.filmes-cartaz {
+	background: url(img/icon_filmes.png) left top no-repeat;
+}
+
+ul li span.cinemas {
+	background: url(img/icon_cinemas.png) left top no-repeat;
+}
+
+ul li span.proximas-sessoes {
+	background: url(img/icon_horarios.png) left top no-repeat;
+}
+
+ul li span.outras-cidades {
+	background: url(img/icon_cidades.png) left top no-repeat;
+}
+
 
 /* when you have a first LI item on any list */
 
@@ -180,25 +402,25 @@ ul li.arrow {
 /* universal links on list */
 
 ul li a, li.img a + a {
-    color: #000;
+    color:#303030;
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     display: block;
-    padding: 12px 10px 12px 10px;
+    padding: 12px 30px 12px 10px;
     margin: -10px;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+    
 }
 
 ul li a.active {
-    background: #194fdb url(img/selection.png) 0 0 repeat-x;
-    color: #fff;
+    background: #ECB20A url(img/selection_yellow.png) 0 0 repeat-x;
+     text-shadow: 0px 1px 0px #FFD31D;
 }
 
 ul li a.button {
-    background-color: #194fdb;
-    color: #fff;
+    background-color: #ECB20A;
 }
 
 ul li.img a + a {

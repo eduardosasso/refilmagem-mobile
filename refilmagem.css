@@ -1,0 +1,13 @@
+div#poster {
+  border: 1px solid #000000;
+  width: 65px;
+  height: 95px;
+}
+
+/** 
+ * While we're having the loading class set.
+ * Removig it, will remove the loading message
+ */
+div#poster.loading {
+  background: url(themes/apple/img/loading.gif) no-repeat center center;
+}

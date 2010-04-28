@@ -1,0 +1,33 @@
+<html>
+<head>
+	<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+
+	
+	// $.ajax({
+	// 	type: 'GET',
+	// 	dataType: 'jsonp',
+	// 	url: 'http://beta.refilmagem.com.br/services/json',
+	// 	data: { method: "node.get", nid: "106980"},
+	// 	success: function(data) {
+	// 		console.log(data);
+	// 	},
+	// });
+	
+	$.ajax({
+		type: 'GET',
+		dataType: 'jsonp',
+		url: 'http://beta.refilmagem.com.br/services/json',
+		data: { method: "views.get", view_name: "lista_cidades", display_id: 'page_2'},
+		success: function(data) {
+			console.log(data.data[0].term_data_name);
+		},
+	});
+
+	</script>
+</head>
+<body>
+
+</body>
+
+</html>
