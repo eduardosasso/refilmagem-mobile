@@ -1,5 +1,3 @@
-document.write('<style type="text/css">body{display:none}</style>');
-
 String.prototype.trunc = function(n){
 	return this.substr(0,n-1)+(this.length>n?' <a href="#" id="sinopse_completa">...Mais</a>':'');
 };
@@ -790,8 +788,6 @@ var init = function(){
 
 $(function (){
 	init();
-	
-	$('body').css('display','block');
 	
 	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 		view.loaderVisible(true);
