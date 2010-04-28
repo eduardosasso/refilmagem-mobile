@@ -461,7 +461,7 @@ view = {
 					
 					anchor = $('<a/>', {  
 						id: val.id,
-					    href: '#cinema',  
+					    href: '#',  
 					    text: val.nome
 					});
 
@@ -485,6 +485,17 @@ view = {
 					});
 					
 					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
+					
+					$('#horarios ul li a').tap(function(){
+						$('#cinema h2').text($(this).text());
+						$('#cinema ul').empty();
+
+						view.filmes_cinema($(this).attr('id'));
+						
+						jqt.goTo('#cinema');
+						
+						return false;						
+					});
 				});
 				view.loaderVisible(false);
 			});
@@ -542,6 +553,13 @@ view = {
 	},
 	
 	filmes_cinema: function(cinema){
+		view.loaderVisible(true);
+		if (view.grava_cache('cinemas')) {
+	        view.loaderVisible(false);
+			return;
+		}
+		$('#cinema ul').empty();
+		
 		rfmg.filmes_cinema(cinema, cidade, function(filmes){
 			$.each(filmes, function(index, filme) {
 				nid = filme.node_node_data_field_ref_filme_nid;
@@ -595,6 +613,7 @@ view = {
 				};				
 
 				$('#cinema ul').append(list_item);
+				view.loaderVisible(false);
 				
 			});
 		})
@@ -774,22 +793,24 @@ $(function (){
 	
 	$('body').css('display','block');
 	
-	$('#proximas-sessoes ul').click(function(){
-		//view.loaderVisible(true);
+	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
+		view.loaderVisible(true);
 	});
 	
 	$('#cinema').bind('pageAnimationEnd', function(e, info){
-		console.log('cinema');
-		
 		if (info.direction == 'out') return;
 		
 		//recupera quem chamou a janela
 		ref = $(this).data('referrer');
-		nid = ref.attr('id');
-		$('#cinema h2').text(ref.text());
-		$('#cinema ul').empty();
 		
-		view.filmes_cinema(nid);
+		if (ref !== undefined) {
+			nid = ref.attr('id');
+			$('#cinema h2').text(ref.text());
+			$('#cinema ul').empty();
+
+			view.filmes_cinema(nid);
+			
+		}
 	});
 	
 	$('#filme').bind('pageAnimationEnd', function(e, info){
