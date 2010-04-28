@@ -789,8 +789,6 @@ var init = function(){
 $(function (){
 	init();
 	
-	view.loaderVisible(true);
-	
 	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 		view.loaderVisible(true);
 	});
