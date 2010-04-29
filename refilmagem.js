@@ -438,6 +438,24 @@ view = {
 			poster = filme.files_node_data_field_poster_filepath;
 			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
 			
+			if (pre_estreia != null) {
+				pre_estreia = pre_estreia.split(",");
+
+				if ($.inArray(cidade, pre_estreia) != -1) {
+					pre_estreia = true;
+					$('#filme h2').append('<span class="detalhes_filme">(pre-estreia)</span>');
+				};
+			}
+			
+			if (estreia != null && pre_estreia == false) {
+				estreia = estreia.split(",");
+
+				if ($.inArray(cidade, estreia) != -1) {
+					$('#filme h2').append('<span class="detalhes_filme">(estreia)</span>');
+				};
+			}
+			
+			
 			//faz as estrelas
 			for (var i=0; i < 5; i++) {
 				estrela = $('<div/>').css('width', '0%');
@@ -842,7 +860,10 @@ $(function (){
 		ref = $(this).data('referrer');
 		nid = ref.attr('id');
 		
-		$('#filme h2').text(ref.text());
+		filme = ref.text();
+		filme = filme.replace('(dublado)','');
+		filme = filme.replace('(pre-estreia)','');
+		$('#filme h2').text(filme);
 		
 		view.filme(nid);
 	});
