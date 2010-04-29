@@ -420,6 +420,8 @@ view = {
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
+			
+			console.log(filme);
 
 			tempo = filme.node_data_field_idade_field_tempo_value;
 			idade = filme.node_data_field_idade_field_idade_value;
@@ -541,7 +543,10 @@ view = {
 	},
 	
 	strip_html: function(string) { 
-	    return string.replace(/<(.|\n)*?>/g, ''); 
+	    texto =  string.replace(/<(.|\n)*?>/g, ''); 
+		texto = texto.replace(/\r\n\r\n/g, "</p><p>").replace(/\n\n/g, "</p><p>");
+		texto = texto.replace(/\r\n/g, "<br />").replace(/\n/g, "<br />");
+		return texto;
 	},
 	
 	proximas_sessoes: function() {
@@ -598,7 +603,16 @@ view = {
 					detalhes_filme.push('(dublado)');
 				}
 				
-				if (estreia != null) {
+				if (pre_estreia != null) {
+					pre_estreias = pre_estreia.split(",");
+
+					if ($.inArray(cidade, pre_estreias) != -1) {
+						detalhes_filme.push('(pre-estreia)');
+						pre_estreia = true;
+					};
+				}
+				
+				if (estreia != null && pre_estreia == false) {
 					estreias = estreia.split(",");
 
 					if ($.inArray(cidade, estreias) != -1) {
@@ -606,13 +620,6 @@ view = {
 					};
 				}
 				
-				if (pre_estreia != null) {
-					pre_estreias = pre_estreia.split(",");
-
-					if ($.inArray(cidade, pre_estreias) != -1) {
-						detalhes_filme.push('(pre-estreia)');
-					};
-				}
 				
 				if (detalhes_filme.length > 0) {
 					detalhes_filme = detalhes_filme.join(' ');
