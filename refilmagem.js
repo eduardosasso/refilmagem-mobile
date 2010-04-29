@@ -403,7 +403,7 @@ view = {
 				
 				view.limpa_cache('cinemas');
 				view.limpa_cache('cinema');
-				view.limpa_cache('filmes-em-cartaz');				
+				view.limpa_cache('filmes_em_cartaz');
 			});
 
 		});
@@ -531,6 +531,14 @@ view = {
         view.loaderVisible(true);
 
 		rfmg.proximas_sessoes(cidade,function(sessoes){
+
+			if (sessoes === undefined) {
+				view.loaderVisible(false);	
+				$('#proximas-sessoes').append('<h2>Nenhuma sessão por enquanto.</h2>');
+				return;
+			}
+				
+			$('#proximas-sessoes h2').remove();
 			$.each(sessoes, function(i,item) {
 				sessao = item.hora + " › " + item.title;
 				class_ = cidade + " " + item.hora;
@@ -552,13 +560,11 @@ view = {
 	
 	filmes_cinema: function(cinema){
 		view.loaderVisible(true);
-		if (view.grava_cache('cinemas')) {
-	        view.loaderVisible(false);
-			return;
-		}
 		$('#cinema ul').empty();
 		
 		rfmg.filmes_cinema(cinema, cidade, function(filmes){
+			var detalhes_filme = new Array();
+			
 			$.each(filmes, function(index, filme) {
 				nid = filme.node_node_data_field_ref_filme_nid;
 				nome = filme.node_node_data_field_ref_filme_title;
@@ -568,47 +574,42 @@ view = {
 				poster = filme.files_node_data_field_poster_filepath;
 				lingua = filme.node_node_data_field_ref_filme__term_data_name;
 				
-				if (lingua == 'Dublado') {
-					lingua = '(dublado) ';
-				} else {
-					lingua = '';
-				}
+				detalhes_filme = new Array()
 				
-				anchor = $('<a/>', {  
-					id: nid,
-				    href: '#filme',  
-				    text: nome,
-				});
-
-				list_item = $('<li/>').attr('class','arrow').append(anchor);
+				if (lingua == 'Dublado') {
+					detalhes_filme.push('(dublado)');
+				}
 				
 				if (estreia != null) {
 					estreias = estreia.split(",");
 
 					if ($.inArray(cidade, estreias) != -1) {
-						anchor_estreia = $('<a/>', {  
-							id: nid,
-						    href: '#filme',  
-						    text: lingua + '(estreia)',
-						});
-						
-						list_item.append(anchor_estreia);
+						detalhes_filme.push('(estreia)');
 					};
-				};
+				}
 				
 				if (pre_estreia != null) {
 					pre_estreias = pre_estreia.split(",");
 
 					if ($.inArray(cidade, pre_estreias) != -1) {
-						anchor_pre_estreia = $('<a/>', {  
-							id: nid,
-						    href: '#filme',  
-						    text: lingua + '(pre-estreia)',
-						});
-						
-						list_item.append(anchor_pre_estreia);
+						detalhes_filme.push('(pre-estreia)');
 					};
-				};				
+				}
+				
+				if (detalhes_filme.length > 0) {
+					detalhes_filme = detalhes_filme.join(' ');
+					detalhes_filme = '<span class="detalhes_filme">' + detalhes_filme + '</span>';
+				} else {
+					detalhes_filme = '';
+				}
+				
+				anchor = $('<a/>', {  
+					id: nid,
+				    href: '#filme',  
+				    html: nome + detalhes_filme,
+				});
+
+				list_item = $('<li/>').attr('class','arrow').append(anchor);
 
 				$('#cinema ul').append(list_item);
 				view.loaderVisible(false);
@@ -625,7 +626,8 @@ view = {
 		}
 
 		$('#filmes-em-cartaz ul').empty();
-		finalizou = 0;
+		$('#filmes-em-cartaz h2').hide();
+		
 		var items_estreias = [];		
 		rfmg.estreias_da_semana(cidade,function(estreias){
 			if (estreias.length == 0) {
@@ -633,23 +635,42 @@ view = {
 			} else {
 				$('#estreias_label, #lista_estreias').show();
 
-				$.each(estreias, function(index, estreia) {
+				$.each(estreias, function(index, estreia) {					
+					detalhes_filme = new Array();
+					
+					pre_estreia = estreia.node_node_data_field_ref_filme_node_data_field_poster_field_pre_estreia_api_value;
+					if (pre_estreia != null) {
+						pre_estreia = pre_estreia.split(",");					
+						if ($.inArray(cidade, pre_estreia) != -1) {
+							detalhes_filme.push('(pre-estreia)');
+						};
+					};
+					
+					nome = estreia.node_node_data_field_ref_filme_title;
+					nome = nome.replace('(dublado)','');
+
+					if (estreia.node_node_data_field_ref_filme_title != nome) {
+						detalhes_filme.push('(dublado)');
+					};
+					
+					if (detalhes_filme.length > 0) {
+						detalhes_filme = detalhes_filme.join(' ');
+						detalhes_filme = '<span class="detalhes_filme">'+ detalhes_filme + '</span>';
+					} else {
+						detalhes_filme = '';
+					}
+
+					//nome = '<span class="detalhes_filme">' + '</span>';
 					anchor = $('<a/>', {  
 						id: estreia.node_node_data_field_ref_filme_nid,
-						href: '#filme',  
-						text: estreia.node_node_data_field_ref_filme_title,
+					    href: '#filme',  
+					    html: nome + detalhes_filme,
 					});
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
 					items_estreias.push(list_item);
 				});
 				$.fn.append.apply($('#lista_estreias'), items_estreias);
-				//$('#lista_estreias').append(list_item);
-				finalizou++;
-				if (finalizou == 2) {
-					view.loaderVisible(false);
-				};
-				
 			}
 		});
 		
@@ -657,23 +678,29 @@ view = {
 
 		rfmg.filmes_em_cartaz(cidade,function(filmes){
 			$.each(filmes, function(index, filme) {
+				nome = filme.node_node_data_field_ref_filme_title;
+				nome = nome.replace('(dublado)','');
+				
+				dublado = '';
+				
+				if (filme.node_node_data_field_ref_filme_title != nome) {
+					dublado = '<span class="detalhes_filme">(dublado)</span>';
+				};
+				
+				//nome = '<span class="detalhes_filme">' + '</span>';
 				anchor = $('<a/>', {  
 					id: filme.node_node_data_field_ref_filme_nid,
 				    href: '#filme',  
-				    text: filme.node_node_data_field_ref_filme_title,
+				    html: nome + dublado,
 				});
 				
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
 				
 				items.push(list_item);
 			});
-			
+			$('#filmes-em-cartaz h2:last').show();
 			$.fn.append.apply( $('#lista_filmes_em_cartaz'), items);
-			finalizou++;
-			
-			if (finalizou == 2) {
-				view.loaderVisible(false);
-			};
+			view.loaderVisible(false);
 			
 			//$('#lista_filmes_em_cartaz').append('<li>sss</li>');
 		});
@@ -795,7 +822,7 @@ $(function (){
 	
 	$('#cinema').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
-		
+
 		//recupera quem chamou a janela
 		ref = $(this).data('referrer');
 		
