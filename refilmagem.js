@@ -89,11 +89,16 @@ var rfmg = {
 					if (cinema_anterior == item.node_node_data_field_ref_cinema_nid) {
 						return true;
 					};
+
+					telefone = item.node_node_data_field_ref_cinema_node_data_field_telefone_field_telefone_value;
+					site = item.node_node_data_field_ref_cinema_node_data_field_url_field_url_value;
 					
 					var cinema = {  
 					  	nid : item.node_node_data_field_ref_cinema_nid,
 						nome : item.node_node_data_field_ref_cinema_title,
 						endereco : item.node_node_data_field_ref_cinema__node_revisions_body,
+						telefone: telefone,
+						site: site,
 					};
 					
 					_cinemas.push(cinema);
@@ -189,8 +194,6 @@ var rfmg = {
 	},
 	
 	horarios_filme: function(movie_id_name, cidade, callback) {
-		console.log(movie_id_name);
-		console.log(cidade);
 		var _this = this;
 		
 		params = {
@@ -213,6 +216,9 @@ var rfmg = {
 				cinema_id = val.node_node_data_field_ref_cinema_nid;		
 				cinema_nome = val.node_node_data_field_ref_cinema_title;
 				horario = val.node_data_field_horario_field_horario_value;
+				endereco = val.node_node_data_field_ref_cinema__node_revisions_body;
+				telefone = val.node_node_data_field_ref_cinema_node_data_field_telefone_field_telefone_value;
+				site = val.node_node_data_field_ref_cinema_node_data_field_url_field_url_value;
 				
 				if (cinema_id_anterior == cinema_id) {
 					cinema.horario.push(horario);
@@ -220,6 +226,9 @@ var rfmg = {
 					cinema = new Object();
 					cinema.id = cinema_id;
 					cinema.nome = cinema_nome;
+					cinema.endereco = endereco,
+					cinema.site = site,
+					cinema.telefone = telefone,
 					cinema.horario = new Array(horario);
 					
 					horarios.push(cinema);
@@ -228,8 +237,6 @@ var rfmg = {
 				cinema_id_anterior = cinema_id;
 				
 			});
-			
-			console.log(horarios);
 			
 			callback.call(_this, horarios);
 		});		
@@ -420,8 +427,6 @@ view = {
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
-			
-			console.log(filme);
 
 			tempo = filme.node_data_field_idade_field_tempo_value;
 			idade = filme.node_data_field_idade_field_idade_value;
@@ -457,7 +462,6 @@ view = {
 				};
 			}
 			
-			
 			//faz as estrelas
 			for (var i=0; i < 5; i++) {
 				estrela = $('<div/>').css('width', '0%');
@@ -476,11 +480,13 @@ view = {
 			
 			rfmg.horarios_filme(movie_id_name, cidade, function(horarios) {
 				$.each(horarios, function(index, val) {
-					
 					anchor = $('<a/>', {  
 						id: val.id,
 					    href: '#',  
-					    text: val.nome
+					    text: val.nome,
+						alt: val.telefone,
+						title: val.endereco,
+						rel: val.site						
 					});
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
@@ -503,19 +509,24 @@ view = {
 					});
 					
 					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
-					
-					$('#horarios ul li a').tap(function(){
-						$('#cinema h2').text($(this).text());
-						$('#cinema ul').empty();
-
-						view.filmes_cinema($(this).attr('id'));
-						
-						jqt.goTo('#cinema');
-						
-						return false;						
-					});
 				});
+				
 				view.loaderVisible(false);
+				
+				$('#horarios ul li a').click(function(){
+					id = $(this).attr('id');
+					nome = $(this).text();
+					endereco = $(this).attr('title');
+					telefone = $(this).attr('alt');
+					site = $(this).attr('rel');
+					
+					view.filmes_cinema(id, nome, endereco, telefone, site);
+					
+					jqt.goTo('#cinema');
+					
+					return false;						
+				});
+				
 			});
 			
 			//$('#titulo_original').html(titulo_original);
@@ -581,9 +592,22 @@ view = {
 		});
 	},
 	
-	filmes_cinema: function(cinema){
+	filmes_cinema: function(cinema, nome, endereco, telefone, site){
+		
 		view.loaderVisible(true);
-		$('#cinema ul').empty();
+		
+		$('#cinema ul, #cinema h2, #cinema #endereco_cinema').empty();
+		
+		if (telefone != 'null' && telefone != '') {
+			endereco = endereco + '<span class="telefone">' + telefone + '</span>';
+		};
+		
+		if (site != 'null' && site != '') {
+			endereco = endereco + '<span class="site"><a href="'+ site + '">Site oficial</a></span>';
+		};
+					
+		$('#cinema h2').text(nome);
+		$('#cinema #endereco_cinema').html(endereco);
 		
 		rfmg.filmes_cinema(cinema, cidade, function(filmes){
 			var detalhes_filme = new Array();
@@ -745,8 +769,11 @@ view = {
 				$.each(data, function(index, cinema) {
 					anchor = $('<a/>', {  
 						id: cinema.nid,
-					    href: '#cinema',  
+					    href: '#',  
 					    text: cinema.nome,
+						title: cinema.endereco,
+						alt: cinema.telefone,
+						rel: cinema.site
 					});
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
@@ -754,7 +781,23 @@ view = {
 				});				
 				$.fn.append.apply( $('#cinemas ul'), items);
 				//$('#cinemas ul').append(list_item);
-		        view.loaderVisible(false);				
+		        view.loaderVisible(false);
+		
+				$('#cinemas ul li a').click(function(){
+					id = $(this).attr('id');
+					nome = $(this).text();
+					endereco = $(this).attr('title');
+					telefone = $(this).attr('alt');
+					site = $(this).attr('rel');
+					
+					view.filmes_cinema(id, nome, endereco, telefone, site);
+					
+					jqt.goTo('#cinema');
+					
+					return false;						
+				});
+				
+				
 			});			
 		});		
 	},
@@ -845,22 +888,6 @@ $(function (){
 		view.loaderVisible(true);
 	});
 	
-	$('#cinema').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-
-		//recupera quem chamou a janela
-		ref = $(this).data('referrer');
-		
-		if (ref !== undefined) {
-			nid = ref.attr('id');
-			$('#cinema h2').text(ref.text());
-			$('#cinema ul').empty();
-
-			view.filmes_cinema(nid);
-			
-		}
-	});
-	
 	$('#filme').bind('pageAnimationEnd', function(e, info){
 		if (info.direction == 'out') return;
 		
@@ -880,12 +907,6 @@ $(function (){
 		
 		view.filmes_em_cartaz();
 		
-	});
-	
-	//sempre limpa a lista de cinemas quando entrar nessa tela
-	$('#cinemas').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		//$('ul', $(this)).empty();
 	});
 	
 	$('#home').bind('pageAnimationEnd', function(e, info){
