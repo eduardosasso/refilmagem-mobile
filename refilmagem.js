@@ -307,6 +307,13 @@ var rfmg = {
 	
 	ordena_por_proximidade: function(cinemas, campo_endereco, onde_estou, callback) {
 		var _this = this;		
+
+		//se ta sem geo retorna
+		if (onde_estou == '') {
+			callback.call(_this,cinemas);	
+			return;
+		};
+
 		var z = 0;
 		
 		$.each(cinemas, function(key, cinema) { 
@@ -375,20 +382,26 @@ view = {
 	        view.loaderVisible(false);
 			return;
 		}
+
+		var cidade_padrao = false;
 		
 		rfmg.cidades(function(cidades){
 			var ativo ='';
 			$.each(cidades, function(index, _cidade) {
 				ativo = '';
 				if (_cidade.tid == cidade) {
-					ativo = 'default';
+					cidade_padrao = true;
 				} 	
 				
 				anchor = $('<a/>', {  
 					id: _cidade.tid,
 					href: '#home',  
 					text: _cidade.term_data_name
-				}).attr('class', ativo);
+				});
+				
+				if (cidade_padrao) {
+					anchor = '<span class="cidade_default">' + anchor.html() + '</span>';
+				}
 
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
 
@@ -400,8 +413,11 @@ view = {
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
 				//marca a cidade atual
-				$('#cidades ul li a').removeClass('default');
-				$(this).addClass('default');
+				$('#cidades ul li span').removeClass('cidade_default');
+
+				cidade = $(this).text();
+
+				$(this).html('<span class="cidade_default">' + cidade + '</span>');
 				
 				cidade_id = $(this).attr('id');
 				nome = $(this).text();
@@ -479,54 +495,55 @@ view = {
 			};
 			
 			rfmg.horarios_filme(movie_id_name, cidade, function(horarios) {
-				$.each(horarios, function(index, val) {
-					anchor = $('<a/>', {  
-						id: val.id,
-					    href: '#',  
-					    text: val.nome,
-						alt: val.telefone,
-						title: val.endereco,
-						rel: val.site						
+				rfmg.ordena_por_proximidade(horarios, 'endereco', onde_estou, function(data){
+					$.each(horarios, function(index, val) {
+						anchor = $('<a/>', {  
+							id: val.id,
+							href: '#',  
+							text: val.nome,
+							alt: val.telefone,
+							title: val.endereco,
+							rel: val.site						
+						});
+
+						list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+						ul_cinema = $('<ul/>').addClass('rounded nome_cinema').append(list_item);
+
+						$('<div/>').addClass('cinema').attr('id', 'c' + val.id).append(ul_cinema).appendTo('#horarios');
+
+						div = $('div#c' + val.id).append('<ul class="horarios_cinema"/>');
+
+						$.each(val.horario, function(index, horario) {
+							horafilme = new Date (new Date().toDateString() + ' ' + horario);
+							hora = new Date();
+
+							if (hora >= horafilme) {
+								$('<li/>').addClass('movie_started').text(horario).appendTo($('ul:last', div));
+							} else {
+								$('<li/>').text(horario).appendTo($('ul:last', div));
+							}
+						});
+
+						$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
 					});
 
-					list_item = $('<li/>').attr('class','arrow').append(anchor);
-					
-					ul_cinema = $('<ul/>').addClass('rounded nome_cinema').append(list_item);
-					
-					$('<div/>').addClass('cinema').attr('id', 'c' + val.id).append(ul_cinema).appendTo('#horarios');
-					
-					div = $('div#c' + val.id).append('<ul class="horarios_cinema"/>');
-					
-					$.each(val.horario, function(index, horario) {
-						horafilme = new Date (new Date().toDateString() + ' ' + horario);
-						hora = new Date();
+					view.loaderVisible(false);
 
-						if (hora >= horafilme) {
-							$('<li/>').addClass('movie_started').text(horario).appendTo($('ul:last', div));
-						} else {
-							$('<li/>').text(horario).appendTo($('ul:last', div));
-						}
+					$('#horarios ul li a').click(function(){
+						id = $(this).attr('id');
+						nome = $(this).text();
+						endereco = $(this).attr('title');
+						telefone = $(this).attr('alt');
+						site = $(this).attr('rel');
+
+						view.filmes_cinema(id, nome, endereco, telefone, site);
+
+						jqt.goTo('#cinema');
+
+						return false;						
 					});
-					
-					$('<li/>').text('.').addClass('clear').appendTo($('ul:last', div));
-				});
-				
-				view.loaderVisible(false);
-				
-				$('#horarios ul li a').click(function(){
-					id = $(this).attr('id');
-					nome = $(this).text();
-					endereco = $(this).attr('title');
-					telefone = $(this).attr('alt');
-					site = $(this).attr('rel');
-					
-					view.filmes_cinema(id, nome, endereco, telefone, site);
-					
-					jqt.goTo('#cinema');
-					
-					return false;						
-				});
-				
+				});	
 			});
 			
 			//$('#titulo_original').html(titulo_original);
@@ -811,6 +828,43 @@ view = {
             $('#loader').css('display', 'none');
         }
     },
+
+	init: function(cidade){
+		rfmg.cidade_meta(cidade,function(metadata){
+			//se vier vazio eh pq a cidade no geo nao eh atendida pelo site
+			if (metadata === undefined) {
+				cidade_id = '231';
+				cidade = 'São Paulo';
+			} else {
+				cidade_id = metadata.tid;
+			}
+
+			$('#home ul').show();
+			$('#home h2').text(cidade);
+			view.loaderVisible(false);
+
+			view.set_minha_localizacao(latlong, cidade_id);
+
+			$('#home ul li a').click(function(e){
+				id = $(this).attr('href');
+
+				switch (id) {
+					case '#cidades': 
+					view.cidades();
+					break;
+
+					case '#cinemas': 
+					view.cinemas();
+					break;	
+
+					case '#proximas-sessoes': 
+					view.proximas_sessoes();
+					break;	
+				}
+			});
+		});
+	},
+
 }
 
 var jqt = new $.jQTouch({
@@ -818,71 +872,28 @@ var jqt = new $.jQTouch({
     statusBar: 'black-translucent',
 });
 
-// Pega a localizacao do usuario e define latitudo, longitude e cidade. 
-// Tem q validar se vem de uma cidade nao atendida.
-var geo = {
-	latitude: '0',
-	longitude: '0',
-};
-var init = function(){
-	//arteplex
-	// localizacao = '-30.02167427,-51.16154187';
-	
-	$('#home ul').hide();
-	
-//	jqt.updateLocation(function(geo){
-        //if (geo) {
-			geo.latitude = '37.331689';
-			geo.longitude = '-122.030731';
-			
-			latlong = geo.latitude + ',' + geo.longitude;
-			
-			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(data){
-				cidade = data.query.results.place.locality1.content;
-				
-				rfmg.cidade_meta(cidade,function(metadata){
-					//se vier vazio eh pq a cidade no geo nao eh atendida pelo site
-					if (metadata === undefined) {
-						cidade_id = '231';
-						cidade = 'São Paulo';
-					} else {
-						cidade_id = metadata.tid;
-					}
-
-					$('#home ul').show();
-					$('#home h2').text(cidade);
-
-					view.set_minha_localizacao(latlong, cidade_id);
-
-					$('#home ul li a').click(function(e){
-						id = $(this).attr('href');
-
-						switch (id) {
-							case '#cidades': 
-							view.cidades();
-							break;
-
-							case '#cinemas': 
-							view.cinemas();
-							break;	
-
-							case '#proximas-sessoes': 
-							view.proximas_sessoes();
-							break;	
-						}
-					});
-				});
-				
-			});
-        // } else {
-        // 			$('#cinemas h2').text('Localização desconhecida');
-        //         }
-//    });
-	
-}
 
 $(function (){
-	init();
+	//tenta recuperar a localizacao do usuario
+	$('#home ul').hide();
+	view.loaderVisible(true);	
+	jqt.updateLocation(function(geo){
+		latlong = '';
+		if (geo) {
+			latlong = geo.latitude + ',' + geo.longitude;
+
+			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(data){
+				cidade = data.query.results.place.locality1.content;
+
+				view.init(cidade);
+			});
+		} else {
+			//se nao achou via geo a cidade padrao eh sp,
+			//da pra testar tentando pegar a cidade pelo ip...
+			cidade = 'São Paulo';
+			view.init(cidade);
+		}
+	});
 	
 	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 		view.loaderVisible(true);
