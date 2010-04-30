@@ -289,6 +289,17 @@ var rfmg = {
 		});
 	},
 	
+	proximas_sessoes_near_by: function(cinemas, callback) {
+		var _this = this;
+		
+		url = rfmg.url + "/api/proximas-sessoes-cinemas/" + cinemas + "&callback=?";
+		
+		$.getJSON(url, function(result){
+			sessoes =  result.nodes;
+			callback.call(_this, sessoes);			
+		});
+	},
+	
 	distancia: function(endereco_inicio, endereco_fim, callback) {
 	 	var _this = this;
 		
