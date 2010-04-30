@@ -291,17 +291,36 @@ var rfmg = {
 	
 	distancia: function(endereco_inicio, endereco_fim, callback) {
 	 	var _this = this;
-	
-		var google_maps = "http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=";
+		
+		var google_maps_url = "http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=json&doflg=ptj&q=";
+		var google_maps = google_maps_url;
 		google_maps += "from:" + escape(endereco_inicio + ' ');
 		google_maps += "to:" + escape(endereco_fim);
+		google_maps += "&callback=?"; 
 		
-		rfmg.request(google_maps, function(data) {
-			result = data.query.results.json;
-			// directions = result.Directions;
-			//status = result.Status;
-			
-			 callback.call(_this,result);
+		$.getJSON(google_maps,function(data){
+			//se na primeira tentativa nao conseguir pegar a distancia eh pq o endereco ta bixado entao tenta consertar pelo google mesmo
+			if (data.Status.code != 200) {
+				//url_ = 'http://maps.google.com/maps/api/geocode/json?address=' + escape(endereco_fim) + '&sensor=false&output=json&callback=?';
+				url_ = 'http://maps.google.com/maps/geo?q=' + endereco_fim + '&oe=utf-8&sensor=false&output=json&callback=?';
+
+				$.getJSON(url_,function(result){
+					//console.log('endereco errado');
+					//console.log(result);
+					endereco_correto = result.Placemark[0].address;
+					
+					gm_url = google_maps_url;
+					gm_url += "from:" + escape(endereco_inicio + ' ');
+					gm_url += "to:" + escape(endereco_correto);
+					gm_url += "&callback=?";
+
+					$.getJSON(gm_url,function(datax){
+						callback.call(_this,datax);
+					});
+				});
+			} else {
+				callback.call(_this,data);
+			}			
 		});	
 	},
 	
@@ -322,7 +341,9 @@ var rfmg = {
 				//todo 602 nao vem com metros, fazer nova chamada para pegar o endereco certo
 				if (distancia.Status.code == 200) {
 					cinema.distancia = parseInt(distancia.Directions.Distance.meters);
+					cinema.dtempo = distancia.Directions.summaryHtml;
 				} else {
+					//se por acaso nao vier com a distancia seta uma alta...
 					cinema.distancia = parseInt(999990);
 				}
 
@@ -503,7 +524,8 @@ view = {
 							text: val.nome,
 							alt: val.telefone,
 							title: val.endereco,
-							rel: val.site						
+							rel: val.site,
+							rev: val.dtempo,
 						});
 
 						list_item = $('<li/>').attr('class','arrow').append(anchor);
@@ -536,8 +558,9 @@ view = {
 						endereco = $(this).attr('title');
 						telefone = $(this).attr('alt');
 						site = $(this).attr('rel');
+						distancia = $(this).attr('rev');
 
-						view.filmes_cinema(id, nome, endereco, telefone, site);
+						view.filmes_cinema(id, nome, endereco, telefone, site, distancia);
 
 						jqt.goTo('#cinema');
 
@@ -609,7 +632,7 @@ view = {
 		});
 	},
 	
-	filmes_cinema: function(cinema, nome, endereco, telefone, site){
+	filmes_cinema: function(cinema, nome, endereco, telefone, site, distancia){
 		
 		view.loaderVisible(true);
 		
@@ -621,6 +644,10 @@ view = {
 		
 		if (site != 'null' && site != '') {
 			endereco = endereco + '<span class="site"><a href="'+ site + '">Site oficial</a></span>';
+		};
+		
+		if (distancia != 'null' && distancia != '') {
+			endereco = endereco + '<span class="distancia">Distância: ' + distancia + '</span>';
 		};
 					
 		$('#cinema h2').text(nome);
@@ -790,7 +817,8 @@ view = {
 					    text: cinema.nome,
 						title: cinema.endereco,
 						alt: cinema.telefone,
-						rel: cinema.site
+						rel: cinema.site,
+						rev: cinema.dtempo,
 					});
 
 					list_item = $('<li/>').attr('class','arrow').append(anchor);
@@ -806,8 +834,9 @@ view = {
 					endereco = $(this).attr('title');
 					telefone = $(this).attr('alt');
 					site = $(this).attr('rel');
+					distancia = $(this).attr('rev');
 					
-					view.filmes_cinema(id, nome, endereco, telefone, site);
+					view.filmes_cinema(id, nome, endereco, telefone, site, distancia);
 					
 					jqt.goTo('#cinema');
 					
