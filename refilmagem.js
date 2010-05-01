@@ -15,10 +15,14 @@ var rfmg = {
 	},
 	
 	nome_cidade_coords: function(lat, lon, callback){
-		query = "select locality1 from geo.places where woeid in (select place.woeid from flickr.places where lat='"+ lat +"' and lon='"+ lon +"')";
+		// query = "select locality1 from geo.places where woeid in (select place.woeid from flickr.places where lat='"+ lat +"' and lon='"+ lon +"')";
+		// 		
+		// 		var encodedQuery = encodeURIComponent(query.toLowerCase()),
+		// 		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
 		
-		var encodedQuery = encodeURIComponent(query.toLowerCase()),
-		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
+		latlon = lat + ',' + lon;
+		
+		_url = 'http://maps.google.com/maps/geo?q='+ latlon + '&output=json&sensor=false&key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ&callback=?';
 
 		$.getJSON(_url, callback);
 	},
@@ -302,8 +306,9 @@ var rfmg = {
 	
 	distancia: function(endereco_inicio, endereco_fim, callback) {
 	 	var _this = this;
+		endereco_fim = $('<div/>').html(endereco_fim).text(); 
 		
-		var google_maps_url = "http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=json&doflg=ptj&q=";
+		var google_maps_url = "http://maps.google.com/maps/nav?key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ&output=json&sensor=false&oe=iso-8859-1&q=";
 		var google_maps = google_maps_url;
 		google_maps += "from:" + escape(endereco_inicio + ' ');
 		google_maps += "to:" + escape(endereco_fim);
@@ -312,22 +317,36 @@ var rfmg = {
 		$.getJSON(google_maps,function(data){
 			//se na primeira tentativa nao conseguir pegar a distancia eh pq o endereco ta bixado entao tenta consertar pelo google mesmo
 			if (data.Status.code != 200) {
-				//url_ = 'http://maps.google.com/maps/api/geocode/json?address=' + escape(endereco_fim) + '&sensor=false&output=json&callback=?';
-				url_ = 'http://maps.google.com/maps/geo?q=' + endereco_fim + '&oe=utf-8&sensor=false&output=json&callback=?';
+				endereco_errado = $('<div/>').html(endereco_fim).text(); 
 
+				//url_ = 'http://maps.google.com/maps/api/geocode/json?address=' + escape(endereco_fim) + '&sensor=false&output=json&callback=?';
+				url_ = 'http://maps.google.com/maps/geo?key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ&q=' + endereco_errado + '&oe=iso-8859-1&sensor=false&output=json&callback=?';
+				
+				//http://maps.google.com/maps/api/geocode/json?address=Av.%20Assis%20Brasil,%203522,%20Porto%20Alegre%20-%20RS,%2091010-003%20&sensor=false
+				//http://maps.google.com/maps/api/geocode/json?latlng=40.714224,-73.961452&sensor=false
+				
+				//reverso
+				//http://maps.google.com/maps/geo?q=40.714224,-73.961452&output=json&sensor=true_or_false&key=your_api_key
+				
 				$.getJSON(url_,function(result){
 					//console.log('endereco errado');
-					//console.log(result);
-					endereco_correto = result.Placemark[0].address;
+					console.log(result);			
 					
-					gm_url = google_maps_url;
-					gm_url += "from:" + escape(endereco_inicio + ' ');
-					gm_url += "to:" + escape(endereco_correto);
-					gm_url += "&callback=?";
+					if (result.Status.code == 200) {
+						endereco_correto = result.Placemark[0].address;
 
-					$.getJSON(gm_url,function(datax){
-						callback.call(_this,datax);
-					});
+						gm_url = google_maps_url;
+						gm_url += "from:" + escape(endereco_inicio + ' ');
+						gm_url += "to:" + escape(endereco_correto);
+						gm_url += "&callback=?";
+
+						$.getJSON(gm_url,function(datax){
+							callback.call(_this,datax);
+						});
+					} else {
+						callback.call(_this,data);
+					}
+					
 				});
 			} else {
 				callback.call(_this,data);
@@ -421,6 +440,7 @@ view = {
 			var ativo ='';
 			$.each(cidades, function(index, _cidade) {
 				ativo = '';
+				cidade_padrao = false;
 				if (_cidade.tid == cidade) {
 					cidade_padrao = true;
 				} 	
@@ -431,11 +451,12 @@ view = {
 					text: _cidade.term_data_name
 				});
 				
-				if (cidade_padrao) {
-					anchor = '<span class="cidade_default">' + anchor.html() + '</span>';
-				}
-
 				list_item = $('<li/>').attr('class','arrow').append(anchor);
+				
+				if (cidade_padrao) {
+					anchor.wrap('<span class="cidade_default" />');
+				}
+				
 
 				$('#cidades ul').append(list_item);				
 			});
@@ -445,11 +466,9 @@ view = {
 			//trocar por TAP depois
 			$('#cidades ul li a').click(function(){
 				//marca a cidade atual
-				$('#cidades ul li span').removeClass('cidade_default');
+				$('#cidades ul li span.cidade_default').removeClass('cidade_default');
 
-				cidade = $(this).text();
-
-				$(this).html('<span class="cidade_default">' + cidade + '</span>');
+				$(this).wrap('<span class="cidade_default"/>');
 				
 				cidade_id = $(this).attr('id');
 				nome = $(this).text();
@@ -923,7 +942,8 @@ $(function (){
 			latlong = geo.latitude + ',' + geo.longitude;
 
 			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(data){
-				cidade = data.query.results.place.locality1.content;
+				//cidade = data.query.results.place.locality1.content;
+				cidade = data.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
 
 				view.init(cidade);
 			});
