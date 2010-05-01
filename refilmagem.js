@@ -15,16 +15,22 @@ var rfmg = {
 	},
 	
 	nome_cidade_coords: function(lat, lon, callback){
-		// query = "select locality1 from geo.places where woeid in (select place.woeid from flickr.places where lat='"+ lat +"' and lon='"+ lon +"')";
-		// 		
-		// 		var encodedQuery = encodeURIComponent(query.toLowerCase()),
-		// 		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
+		var _this = this;
+
+		query = "select locality1 from geo.places where woeid in (select place.woeid from flickr.places where lat='"+ lat +"' and lon='"+ lon +"')";
+
+		var encodedQuery = encodeURIComponent(query.toLowerCase()),
+		_url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodedQuery + '&format=json&callback=?';
 		
 		latlon = lat + ',' + lon;
-		
-		_url = 'http://maps.google.com/maps/geo?q='+ latlon + '&output=json&sensor=false&key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ&callback=?';
 
-		$.getJSON(_url, callback);
+		//_url = 'http://maps.google.com/maps/geo?q='+ latlon + '&output=json&sensor=true&key=ABQIAAAAm_U5X3msZlIawwmBL471ORQT_8O4OvQyFtE47Y-QdJmYm5WEQRQNZtdpTT-nM5SMKeCF5Hxx0pf0KQ&callback=?';
+
+		$.getJSON(_url, function(data){
+			//cidade = data.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
+			cidade = data.query.results.place.locality1.content;
+			callback.call(_this, cidade);
+		});
 	},
 	
 	service_request: function(data, callback) {
@@ -329,8 +335,6 @@ var rfmg = {
 				//http://maps.google.com/maps/geo?q=40.714224,-73.961452&output=json&sensor=true_or_false&key=your_api_key
 				
 				$.getJSON(url_,function(result){
-					//console.log('endereco errado');
-					console.log(result);			
 					
 					if (result.Status.code == 200) {
 						endereco_correto = result.Placemark[0].address;
@@ -632,34 +636,74 @@ view = {
 	
 	proximas_sessoes: function() {
 		$('#proximas-sessoes ul').empty();
+		$('#proximas-sessoes h2#nenhuma_sessao').remove();
+		
         view.loaderVisible(true);
+		
+		var cinemas_proximos = new Array();
+		
+		if (onde_estou != '') {
+			rfmg.cinemas(cidade,function(cinemas){
+				rfmg.ordena_por_proximidade(cinemas, 'endereco', onde_estou, function(data){
+					$.each(data, function(index, val) {
+						if (index >= 3) return true;
+						cinemas_proximos.push(val.nid)
+					});
+					cinemas_proximos = cinemas_proximos.join(',');
+					
+					rfmg.proximas_sessoes_near_by(cinemas_proximos,function(horarios){
+						if (sessoes === undefined) {
+							view.loaderVisible(false);	
+							$('#proximas-sessoes').append('<h2 id="nenhuma_sessao">Nenhuma sessão por enquanto.</h2>');
+							return;
+						}
+						
+						$.each(horarios, function(i,item) {
+							sessao = item.hora + " › " + item.filme;
+							sessao = sessao + '<span class="detalhes_filme">' + item.cinema + '</span>';
+							class_ = cidade + " " + item.hora;
 
-		rfmg.proximas_sessoes(cidade,function(sessoes){
+							anchor = $('<a/>', {  
+								id: item.nid,
+								alt: item.hora,
+							    href: '#filme',  
+							    html: sessao
+							});
 
-			if (sessoes === undefined) {
-				view.loaderVisible(false);	
-				$('#proximas-sessoes').append('<h2>Nenhuma sessão por enquanto.</h2>');
-				return;
-			}
-				
-			$('#proximas-sessoes h2').remove();
-			$.each(sessoes, function(i,item) {
-				sessao = item.hora + " › " + item.title;
-				class_ = cidade + " " + item.hora;
-				
-				anchor = $('<a/>', {  
-					id: item.nid,
-					alt: item.hora,
-				    href: '#filme',  
-				    text: sessao
+							list_item = $('<li/>').attr('class','arrow').append(anchor);
+							$('#proximas-sessoes ul').append(list_item);
+						});
+						$('#proximas-sessoes h2').text("Próximas sessões aqui perto...");
+						view.loaderVisible(false);
+					});					
 				});
+			});			
+		} else {
+			rfmg.proximas_sessoes(cidade,function(sessoes){
+				if (sessoes === undefined) {
+					view.loaderVisible(false);	
+					$('#proximas-sessoes').append('<h2 id="nenhuma_sessao">Nenhuma sessão por enquanto.</h2>');
+					return;
+				}
 
-				list_item = $('<li/>').attr('class','arrow').append(anchor);
-				
-				$('#proximas-sessoes ul').append(list_item);
-		        view.loaderVisible(false);
+				$.each(sessoes, function(i,item) {
+					sessao = item.hora + " › " + item.title;
+					class_ = cidade + " " + item.hora;
+
+					anchor = $('<a/>', {  
+						id: item.nid,
+						alt: item.hora,
+						href: '#filme',  
+						text: sessao
+					});
+
+					list_item = $('<li/>').attr('class','arrow').append(anchor);
+
+					$('#proximas-sessoes ul').append(list_item);
+					view.loaderVisible(false);
+				});
 			});
-		});
+		}
 	},
 	
 	filmes_cinema: function(cinema, nome, endereco, telefone, site, distancia){
@@ -936,22 +980,22 @@ $(function (){
 	//tenta recuperar a localizacao do usuario
 	$('#home ul').hide();
 	view.loaderVisible(true);	
-	jqt.updateLocation(function(geo){
+	var lookup = jqt.updateLocation(function(geo){
 		latlong = '';
 		if (geo) {
 			latlong = geo.latitude + ',' + geo.longitude;
-
-			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(data){
-				//cidade = data.query.results.place.locality1.content;
-				cidade = data.Placemark[0].AddressDetails.Country.AdministrativeArea.Locality.LocalityName;
-
+			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(cidade){
 				view.init(cidade);
 			});
 		} else {
 			//se nao achou via geo a cidade padrao eh sp,
 			//da pra testar tentando pegar a cidade pelo ip...
+			console.log('sem geo');
 			cidade = 'São Paulo';
 			view.init(cidade);
+		}
+		if (lookup) {
+			console.log('procurando geo');
 		}
 	});
 	
