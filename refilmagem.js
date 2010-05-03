@@ -361,9 +361,8 @@ var rfmg = {
 	ordena_por_proximidade: function(cinemas, campo_endereco, onde_estou, callback) {
 		var _this = this;		
 
-		//se ta sem geo retorna
-		if (onde_estou == '') {
-			callback.call(_this,cinemas);	
+		if (view.minha_cidade().latlon == null) {
+			callback.call(_this,cinemas);
 			return;
 		};
 
@@ -415,7 +414,8 @@ view = {
 	minha_cidade: function(){
 		return {
 			id: cidade,
-			nome: nome_cidade,			
+			nome: nome_cidade,		
+			latlon: onde_estou	
 		}
 	},
 	
@@ -642,7 +642,7 @@ view = {
 		
 		var cinemas_proximos = new Array();
 		
-		if (onde_estou != '') {
+		if (view.minha_cidade().latlon != null) {
 			rfmg.cinemas(cidade,function(cinemas){
 				rfmg.ordena_por_proximidade(cinemas, 'endereco', onde_estou, function(data){
 					$.each(data, function(index, val) {
@@ -932,7 +932,7 @@ view = {
         }
     },
 
-	init: function(cidade){
+	init: function(latlong, cidade){
 		rfmg.cidade_meta(cidade,function(metadata){
 			//se vier vazio eh pq a cidade no geo nao eh atendida pelo site
 			if (metadata === undefined) {
@@ -946,7 +946,7 @@ view = {
 			$('#home h2').text(cidade);
 			view.loaderVisible(false);
 
-			view.set_minha_localizacao(latlong, cidade_id);
+			view.set_minha_localizacao(latlong, cidade_id, cidade);
 
 			$('#home ul li a').click(function(e){
 				id = $(this).attr('href');
@@ -975,28 +975,21 @@ var jqt = new $.jQTouch({
     statusBar: 'black-translucent',
 });
 
-
 $(function (){
+
 	//tenta recuperar a localizacao do usuario
 	$('#home ul').hide();
 	view.loaderVisible(true);	
-	var lookup = jqt.updateLocation(function(geo){
-		latlong = '';
-		if (geo) {
-			latlong = geo.latitude + ',' + geo.longitude;
-			rfmg.nome_cidade_coords(geo.latitude, geo.longitude, function(cidade){
-				view.init(cidade);
-			});
-		} else {
-			//se nao achou via geo a cidade padrao eh sp,
-			//da pra testar tentando pegar a cidade pelo ip...
-			console.log('sem geo');
-			cidade = 'São Paulo';
-			view.init(cidade);
-		}
-		if (lookup) {
-			console.log('procurando geo');
-		}
+	
+	navigator.geolocation.getCurrentPosition(function(p) {
+		latlong = p.coords.latitude + ',' + p.coords.longitude;
+		rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
+			view.init(latlong,cidade);
+		});
+	}, 
+	function(){
+		cidade = 'São Paulo';
+		view.init(null,cidade);
 	});
 	
 	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
