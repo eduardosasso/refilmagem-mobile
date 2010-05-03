@@ -975,53 +975,58 @@ var jqt = new $.jQTouch({
 });
 
 $(function (){
+	
+	if(navigator.onLine == true){ 
+		//tenta recuperar a localizacao do usuario
+		$('#home ul').hide();
+		view.loaderVisible(true);	
 
-	//tenta recuperar a localizacao do usuario
-	$('#home ul').hide();
-	view.loaderVisible(true);	
-	
-	// navigator.geolocation.getCurrentPosition(function(p) {
-	// 	latlong = p.coords.latitude + ',' + p.coords.longitude;
-	// 	rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
-	// 		view.init(latlong,cidade);
-	// 	});
-	// }, 
-	// function(){
-	// 	cidade = 'São Paulo';
-	// 	view.init(null,cidade);
-	// });
-	
-	//para debug
-	cidade = 'São Paulo';
-	view.init(null,cidade);
-	
-	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
-		view.loaderVisible(true);
-	});
-	
-	$('#filme').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		
-		ref = $(this).data('referrer');
-		nid = ref.attr('id');
-		
-		filme = ref.text();
-		filme = filme.replace('(dublado)','');
-		filme = filme.replace('(pre-estreia)','');
-		$('#filme h2').text(filme);
-		
-		view.filme(nid);
-	});
-	
-	$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		
-		view.filmes_em_cartaz();
-		
-	});
-	
-	$('#home').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		$('h2', $(this)).text(view.minha_cidade().nome);
-	});
+		navigator.geolocation.getCurrentPosition(function(p) {
+			latlong = p.coords.latitude + ',' + p.coords.longitude;
+			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
+				view.init(latlong,cidade);
+			});
+		}, 
+		function(){
+			cidade = 'São Paulo';
+			view.init(null,cidade);
+		});
+
+		//para debug
+		// cidade = 'São Paulo';
+		// view.init(null,cidade);
+
+		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
+			view.loaderVisible(true);
+		});
+
+		$('#filme').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+
+			ref = $(this).data('referrer');
+			nid = ref.attr('id');
+
+			filme = ref.text();
+			filme = filme.replace('(dublado)','');
+			filme = filme.replace('(pre-estreia)','');
+			$('#filme h2').text(filme);
+
+			view.filme(nid);
+		});
+
+		$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+
+			view.filmes_em_cartaz();
+
+		});
+
+		$('#home').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+			$('h2', $(this)).text(view.minha_cidade().nome);
+		});
+	} else {
+		$('#home h2').addClass('no-internet').html('Sem internet não funciona! :(');
+		$('#home ul').hide();
+	}	
 });
