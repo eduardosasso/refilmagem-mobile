@@ -2,6 +2,8 @@
 
 body {
     background: #EDEDED url(img/bg_stripes2.png) left top repeat;
+    padding-bottom: 30px !important;
+    margin-bottom: 30px !important;
 }
 
 body > * {
@@ -20,6 +22,26 @@ h1, h2, h3{
 	background: url(img/pin_cidade.png) left center no-repeat;
 	padding-left: 24px;
 }
+#home h2.no-internet{
+	background:none;
+	padding-left: 0;
+}
+#cinema h2 {
+	margin-bottom: 0;
+}
+#endereco_cinema_label {
+	color: #999;
+	text-decoration: none;
+	font-size: 12px;
+	 text-shadow: 0px -1px 0px #000;
+	margin: 0 20px;
+	background: url(img/seta.png) right center no-repeat;
+	padding-right: 15px;
+}
+#endereco_cinema_label:hover {
+	color: #FFF;
+}
+
 #filme h2 {
 	line-height: 22px;
 	font-size: 18px;
@@ -164,9 +186,13 @@ body.landscape .toolbar > h1 {
 }
 
 .grayButton {
-    -webkit-border-image: url(img/toolButton_hover.png) 0 5 0 5;
+    -webkit-border-image: url(img/toolButton2.png) 0 5 0 5;
     color: #FFFFFF;
     margin: 0 10px 10px;
+}
+
+#about div#fechar {
+	margin-bottom: 20px;
 }
 
 /* @end */
@@ -250,15 +276,30 @@ a.abduzeedo {
     -webkit-box-shadow: 0px 0px 2px #000;
 }
 #endereco_cinema {
-	background: #222;
-	color: #999;
-	font-weight: bold;
 	font-size: 13px;
-	line-height: 18px;
+	line-height:20px;
+}
+#endereco_cinema .telefone{
+	display: block;
+	background: url(img/icon_phone.png) left 3px no-repeat;
+	padding-left: 20px;
+
 }
 #endereco_cinema span.site a {
+	color: #333;
+	background: url(img/icon_external.png) right 2px no-repeat;
+	padding-right: 14px;
+	font-weight: bold;
+}
+#endereco_cinema span.site a:hover {
+	text-decoration: none;
+}
+
+#endereco_cinema span.distancia {
 	display: block;
-	color: #999;
+	color: #333;
+	font-weight: bold;
+	margin-top: 10px;
 }
 #filme h2 span.detalhes_filme {
 	display: block;
@@ -450,13 +491,11 @@ ul li {
     padding: 10px 10px 10px 10px;
 }
 ul li span {
-	display: block;
 	padding-left: 24px;
 }
 ul li span.cidade_default{
-	padding: 0;
-	margin-right: 30px;
 	background: url(img/check3.png) right center no-repeat;
+	display: block;
 }
 #cidades ul li span{
 	padding: 0;
@@ -474,7 +513,7 @@ ul li span.proximas-sessoes {
 }
 
 ul li span.outras-cidades {
-	background: url(img/icon_cidades.png) left top no-repeat;
+	background: url(img/icon_cidade.png) left top no-repeat;
 }
 #cidades ul li a.default {
 	
@@ -523,15 +562,14 @@ ul li a, li.img a + a {
     white-space: nowrap;
     overflow: hidden;
     display: block;
-    padding: 12px 30px 12px 10px;
+    padding: 12px 40px 12px 10px;
     margin: -10px;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-    
 }
 
 ul li a.active {
     background: #ECB20A url(img/selection_yellow.png) 0 0 repeat-x;
-     text-shadow: 0px 1px 0px #FFD31D;
+    text-shadow: 0px 1px 0px #FFD31D;
 }
 
 ul li a.button {

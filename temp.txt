@@ -1,3 +1,10 @@
 Rules modulo e regra de estreia
 REST
 content type filme - 2 campos api
+
+
+java -jar ~/Tools/yuicompressor-2.4.2.jar --type js refilmagem.js -o refilmagem.min.js
+java -jar ~/Tools/yuicompressor-2.4.2.jar --type js jqtouch/jqtouch.js -o jqtouch/jqtouch.min.js
+
+java -jar ~/Tools/yuicompressor-2.4.2.jar --type css jqtouch/jqtouch.css -o jqtouch/jqtouch.min.css
+java -jar ~/Tools/yuicompressor-2.4.2.jar --type css themes/apple/theme.css -o themes/apple/theme.min.css

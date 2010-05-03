@@ -459,7 +459,6 @@ view = {
 				if (cidade_padrao) {
 					anchor.wrap('<span class="cidade_default" />');
 				}
-				
 
 				$('#cidades ul').append(list_item);				
 			});
@@ -497,6 +496,9 @@ view = {
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
+			
+			nome = filme.node_title;
+			nome = nome.replace('(dublado)','');
 
 			tempo = filme.node_data_field_idade_field_tempo_value;
 			idade = filme.node_data_field_idade_field_idade_value;
@@ -515,12 +517,14 @@ view = {
 			poster = filme.files_node_data_field_poster_filepath;
 			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
 			
+			$('#filme h2').text(nome);
+			
 			if (pre_estreia != null) {
 				pre_estreia = pre_estreia.split(",");
 
 				if ($.inArray(cidade, pre_estreia) != -1) {
 					pre_estreia = true;
-					$('#filme h2').append('<span class="detalhes_filme">(pre-estreia)</span>');
+					$('#filme h2').append('<br /><span class="detalhes_filme">(pre-estreia)</span>');
 				};
 			}
 			
@@ -528,7 +532,7 @@ view = {
 				estreia = estreia.split(",");
 
 				if ($.inArray(cidade, estreia) != -1) {
-					$('#filme h2').append('<span class="detalhes_filme">(estreia)</span>');
+					$('#filme h2').append('<br /><span class="detalhes_filme">(estreia)</span>');
 				};
 			}
 			
@@ -659,7 +663,7 @@ view = {
 						
 						$.each(horarios, function(i,item) {
 							sessao = item.hora + " › " + item.filme;
-							sessao = sessao + '<span class="detalhes_filme">' + item.cinema + '</span>';
+							sessao = sessao + '<br /><span class="detalhes_filme">' + item.cinema + '</span>';
 							class_ = cidade + " " + item.hora;
 
 							anchor = $('<a/>', {  
@@ -710,6 +714,7 @@ view = {
 		view.loaderVisible(true);
 		
 		$('#cinema ul, #cinema h2, #cinema #endereco_cinema').empty();
+		$('#endereco_cinema').hide();
 		
 		if (telefone != 'null' && telefone != '') {
 			endereco = endereco + '<span class="telefone">' + telefone + '</span>';
@@ -724,7 +729,16 @@ view = {
 		};
 					
 		$('#cinema h2').text(nome);
+		endereco = endereco.split(',');
+		if (endereco[3] === undefined) {
+			endereco[3] = '';
+		} else {
+			endereco[3] = ', ' + endereco[3]
+		}
+		endereco = endereco[0] + ', '+ endereco[1] + '<br />' + endereco[2] + endereco[3];
+		
 		$('#cinema #endereco_cinema').html(endereco);
+		$('#endereco_cinema_label').show();
 		
 		rfmg.filmes_cinema(cinema, cidade, function(filmes){
 			var detalhes_filme = new Array();
@@ -764,7 +778,7 @@ view = {
 				
 				if (detalhes_filme.length > 0) {
 					detalhes_filme = detalhes_filme.join(' ');
-					detalhes_filme = '<span class="detalhes_filme">' + detalhes_filme + '</span>';
+					detalhes_filme = '<br /><span class="detalhes_filme">' + detalhes_filme + '</span>';
 				} else {
 					detalhes_filme = '';
 				}
@@ -821,7 +835,7 @@ view = {
 					
 					if (detalhes_filme.length > 0) {
 						detalhes_filme = detalhes_filme.join(' ');
-						detalhes_filme = '<span class="detalhes_filme">'+ detalhes_filme + '</span>';
+						detalhes_filme = '<br /><span class="detalhes_filme">'+ detalhes_filme + '</span>';
 					} else {
 						detalhes_filme = '';
 					}
@@ -850,7 +864,7 @@ view = {
 				dublado = '';
 				
 				if (filme.node_node_data_field_ref_filme_title != nome) {
-					dublado = '<span class="detalhes_filme">(dublado)</span>';
+					dublado = '<br /><span class="detalhes_filme">(dublado)</span>';
 				};
 				
 				//nome = '<span class="detalhes_filme">' + '</span>';
@@ -975,53 +989,60 @@ var jqt = new $.jQTouch({
 });
 
 $(function (){
+	
+	if(navigator.onLine == true){ 
+		//tenta recuperar a localizacao do usuario
+		$('#home ul').hide();
+		view.loaderVisible(true);	
 
-	//tenta recuperar a localizacao do usuario
-	$('#home ul').hide();
-	view.loaderVisible(true);	
-	
-	// navigator.geolocation.getCurrentPosition(function(p) {
-	// 	latlong = p.coords.latitude + ',' + p.coords.longitude;
-	// 	rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
-	// 		view.init(latlong,cidade);
-	// 	});
-	// }, 
-	// function(){
-	// 	cidade = 'São Paulo';
-	// 	view.init(null,cidade);
-	// });
-	
-	//para debug
-	cidade = 'São Paulo';
-	view.init(null,cidade);
-	
-	$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
-		view.loaderVisible(true);
-	});
-	
-	$('#filme').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
+		// navigator.geolocation.getCurrentPosition(function(p) {
+		// 			latlong = p.coords.latitude + ',' + p.coords.longitude;
+		// 			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
+		// 				view.init(latlong,cidade);
+		// 			});
+		// 		}, 
+		// 		function(){
+		// 			cidade = 'São Paulo';
+		// 			view.init(null,cidade);
+		// 		});
+
+		//para debug
+		cidade = 'Porto Alegre';
+		view.init('-30.02167427,-51.16154187',cidade);
+
+		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
+			view.loaderVisible(true);
+		});
+
+		$('#filme').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+
+			ref = $(this).data('referrer');
+			nid = ref.attr('id');
+
+			view.filme(nid);
+		});
+
+		$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+
+			view.filmes_em_cartaz();
+
+		});
+
+		$('#home').bind('pageAnimationEnd', function(e, info){
+			if (info.direction == 'out') return;
+			$('h2', $(this)).text(view.minha_cidade().nome);
+		});
 		
-		ref = $(this).data('referrer');
-		nid = ref.attr('id');
+		$('#endereco_cinema_label').click(function(){
+			$('#endereco_cinema').show();
+			$(this).hide();
+			return false;
+		});
 		
-		filme = ref.text();
-		filme = filme.replace('(dublado)','');
-		filme = filme.replace('(pre-estreia)','');
-		$('#filme h2').text(filme);
-		
-		view.filme(nid);
-	});
-	
-	$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		
-		view.filmes_em_cartaz();
-		
-	});
-	
-	$('#home').bind('pageAnimationEnd', function(e, info){
-		if (info.direction == 'out') return;
-		$('h2', $(this)).text(view.minha_cidade().nome);
-	});
+	} else {
+		$('#home h2').addClass('no-internet').html('Sem internet não funciona! :(');
+		$('#home ul').hide();
+	}	
 });
