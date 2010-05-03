@@ -995,7 +995,6 @@ $(function (){
 		$('#home ul').hide();
 		view.loaderVisible(true);	
 
-<<<<<<< HEAD:refilmagem.js
 		// navigator.geolocation.getCurrentPosition(function(p) {
 		// 			latlong = p.coords.latitude + ',' + p.coords.longitude;
 		// 			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
@@ -1010,22 +1009,6 @@ $(function (){
 		//para debug
 		cidade = 'Porto Alegre';
 		view.init('-30.02167427,-51.16154187',cidade);
-=======
-		navigator.geolocation.getCurrentPosition(function(p) {
-			latlong = p.coords.latitude + ',' + p.coords.longitude;
-			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
-				view.init(latlong,cidade);
-			});
-		}, 
-		function(){
-			cidade = 'São Paulo';
-			view.init(null,cidade);
-		});
-
-		//para debug
-		// cidade = 'São Paulo';
-		// view.init(null,cidade);
->>>>>>> 90268972814fe6ca84ebca0e59b1162b28177448:refilmagem.js
 
 		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 			view.loaderVisible(true);
@@ -1051,7 +1034,6 @@ $(function (){
 			if (info.direction == 'out') return;
 			$('h2', $(this)).text(view.minha_cidade().nome);
 		});
-<<<<<<< HEAD:refilmagem.js
 		
 		$('#endereco_cinema_label').click(function(){
 			$('#endereco_cinema').show();
@@ -1059,8 +1041,6 @@ $(function (){
 			return false;
 		});
 		
-=======
->>>>>>> 90268972814fe6ca84ebca0e59b1162b28177448:refilmagem.js
 	} else {
 		$('#home h2').addClass('no-internet').html('Sem internet não funciona! :(');
 		$('#home ul').hide();
