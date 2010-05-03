@@ -105,8 +105,8 @@ body.landscape .toolbar > h1 {
 .button:hover, .cancel:hover, .add:hover {
     -webkit-border-image: url(img/toolButton_hover.png) 0 5 0 5;
 }
-.button:active, .cancel:active, .add:active,
-.button.active, .cancel.active, .add.active {
+.button:active, .cancel:active, .add:active, .grayButton:active,
+.button.active, .cancel.active, .add.active, .grayButton.active{
     -webkit-border-image: url(img/toolButton_active.png) 0 5 0 5;	
 }
 .blueButton {
@@ -144,14 +144,18 @@ body.landscape .toolbar > h1 {
 
 .whiteButton,
 .grayButton {
+	border-width: 0px 5px;
+    padding: 0 3px;
+    width: auto;
+    height: 30px;
+    line-height: 30px;
     display: block;
-    border-width: 0 12px;
-    padding: 10px;
     text-align: center;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     text-decoration: inherit;
     color: inherit;
+    
 }
 
 .whiteButton {
@@ -160,8 +164,9 @@ body.landscape .toolbar > h1 {
 }
 
 .grayButton {
-    -webkit-border-image: url(img/grayButton.png) 0 12 0 12;
+    -webkit-border-image: url(img/toolButton_hover.png) 0 5 0 5;
     color: #FFFFFF;
+    margin: 0 10px 10px;
 }
 
 /* @end */
@@ -192,25 +197,26 @@ h1 + ul, h2 + ul, h3 + ul, h4 + ul, h5 + ul, h6 + ul {
 }
 #about p.links {
 	height: 16px;
+	margin-top: 15px;
 }
 #about p.links a {
 	display: block;
-	width: 16px;
-	height: 16px;
+	width: 20px;
+	height: 17px;
 	float: right;
 	text-indent: -9000px;
 	margin-left: 5px;
 }
 #about p.links a.fb {
-	background: url(img/icon_facebook.png) left top no-repeat;
+	background: url(img/icon_fb.png) left top no-repeat;
 }
 
 #about p.links a.tw {
-	background: url(img/icon_twitter.png) left top no-repeat;
+	background: url(img/icon_tw.png) left top no-repeat;
 }
 
 #about p.links a.ml {
-	background: url(img/icon_mail.png) left top no-repeat;
+	background: url(img/icon_ml.png	) left top no-repeat;
 }
 a.zee {
 	display: block;
@@ -218,7 +224,7 @@ a.zee {
 	height: 37px;
 	background: url(img/logo_zee.jpg) left top no-repeat;
 	text-indent: -9000px;
-	margin: 10px 0 10px 40px;
+	margin: 10px 0 10px 15px;
 	float: left;
 }
 a.abduzeedo {
@@ -227,11 +233,12 @@ a.abduzeedo {
 	height: 37px;
 	background: url(img/logo_abduzeedo.jpg) left top no-repeat;
 	text-indent: -9000px;
-	margin: 10px 40px 10px 0;
+	margin: 10px 15px 10px 0;
 	float: right;
 }
 /*** FILME ***/
 .txt_,
+#endereco_cinema,
 #horarios {
     color: #333;
     background: #fff;
@@ -242,6 +249,24 @@ a.abduzeedo {
     -webkit-border-radius: 8px;
     -webkit-box-shadow: 0px 0px 2px #000;
 }
+#endereco_cinema {
+	background: #222;
+	color: #999;
+	font-weight: bold;
+	font-size: 13px;
+	line-height: 18px;
+}
+#endereco_cinema span.site a {
+	display: block;
+	color: #999;
+}
+#filme h2 span.detalhes_filme {
+	display: block;
+	padding-top: 0;
+	line-height: 14px;
+	color: #999;
+}
+
 #horarios {
 	padding: 8px 0 10px;
 	line-height: 26px;
@@ -318,6 +343,9 @@ a.abduzeedo {
 	margin: 10px 0;
 	font-size: 13px;
 	line-height: 17px;
+}
+.txt_ #sinopse p {
+	margin-bottom: 12px;
 }
 .txt_ #sinopse a:link,
 .txt_ #sinopse a:active,
@@ -423,8 +451,15 @@ ul li {
 }
 ul li span {
 	display: block;
-
 	padding-left: 24px;
+}
+ul li span.cidade_default{
+	padding: 0;
+	margin-right: 30px;
+	background: url(img/check3.png) right center no-repeat;
+}
+#cidades ul li span{
+	padding: 0;
 }
 ul li span.filmes-cartaz {
 	background: url(img/icon_filmes.png) left top no-repeat;
@@ -442,7 +477,7 @@ ul li span.outras-cidades {
 	background: url(img/icon_cidades.png) left top no-repeat;
 }
 #cidades ul li a.default {
-	background: url(img/check3.png)90% 50% no-repeat;
+	
 }
 
 span.detalhes_filme {
