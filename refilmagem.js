@@ -497,6 +497,9 @@ view = {
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
+			
+			nome = filme.node_title;
+			nome = nome.replace('(dublado)','');
 
 			tempo = filme.node_data_field_idade_field_tempo_value;
 			idade = filme.node_data_field_idade_field_idade_value;
@@ -514,6 +517,8 @@ view = {
 			sinopse = sinopse.trunc(120);
 			poster = filme.files_node_data_field_poster_filepath;
 			poster_url = rfmg.url + '/sites/default/files/imagecache/iphone/' + poster;
+			
+			$('#filme h2').text(nome);
 			
 			if (pre_estreia != null) {
 				pre_estreia = pre_estreia.split(",");
@@ -1005,11 +1010,6 @@ $(function (){
 
 			ref = $(this).data('referrer');
 			nid = ref.attr('id');
-
-			filme = ref.text();
-			filme = filme.replace('(dublado)','');
-			filme = filme.replace('(pre-estreia)','');
-			$('#filme h2').text(filme);
 
 			view.filme(nid);
 		});
