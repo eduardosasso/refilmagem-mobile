@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>themes/apple/theme.css</string>
+	<string>refilmagem.js</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -26,49 +26,50 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>17</integer>
+				<integer>7</integer>
 				<key>line</key>
-				<integer>14</integer>
+				<integer>156</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>101</integer>
 		</dict>
 		<key>refilmagem.js</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>75</integer>
 				<key>line</key>
-				<integer>790</integer>
+				<integer>494</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>775</integer>
-		</dict>
-		<key>themes/apple/theme.css</key>
-		<dict>
-			<key>caret</key>
+			<integer>480</integer>
+			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
 				<integer>0</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>869</integer>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>1032</integer>
+			</dict>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
 		<string>refilmagem.js</string>
-		<string>themes/apple/theme.css</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<false/>
@@ -101,6 +102,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{0, 0}, {1676, 1028}}</string>
+	<string>{{0, 0}, {1436, 878}}</string>
 </dict>
 </plist>
