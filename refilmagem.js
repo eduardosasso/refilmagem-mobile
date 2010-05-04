@@ -492,7 +492,7 @@ view = {
 		$('#poster').addClass('loading');
 
 		$('#horarios, #sinopse, #resto_sinopse, #estrelas, #detalhes p').empty();
-		$('#titulo_original, #tempo, #classificacao, #genero, #formato').hide();
+		$('#titulo_original, #tempo, #classificacao, #genero, #formato, #trailer').hide();
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
@@ -635,8 +635,7 @@ view = {
 				$('#trailer').html('<embed src="http://www.youtube.com/v/' + video_id + '&hl=pt_BR&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="231" height="143"></embed>');
 			} else {
 				$('#trailer, #trailer_label').hide();
-			}
-			
+			}		
 		});
 	},
 	
@@ -1043,6 +1042,10 @@ $(function (){
 		$('#home').bind('pageAnimationEnd', function(e, info){
 			if (info.direction == 'out') return;
 			$('h2', $(this)).text(view.minha_cidade().nome);
+		});
+		
+		$('#trailer_link').click(function(){
+			$('#trailer').show();
 		});
 		
 		$('#endereco_cinema_label').click(function(){
