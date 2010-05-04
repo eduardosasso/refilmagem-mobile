@@ -3,7 +3,7 @@ String.prototype.trunc = function(n){
 };
 
 var rfmg = {
-	url : "http://beta.refilmagem.com.br",
+	url : "http://refilmagem.com.br",
 
 	request: function(url, callback) {
 		query = 'select * from json where url="' + url + '"';
@@ -192,7 +192,7 @@ var rfmg = {
 		params = {
 			method: "views.get", 
 			view_name: "frontpage", 
-			display_id: 'default',
+			display_id: 'block_1',
 			args: [cidade]
 		}
 		
@@ -294,7 +294,6 @@ var rfmg = {
 		$.getJSON(url, function(result){
 			sessoes =  result.nodes;
 			callback.call(_this, sessoes);
-			
 		});
 	},
 	
@@ -374,6 +373,7 @@ var rfmg = {
 				if (distancia.Status.code == 200) {
 					cinema.distancia = parseInt(distancia.Directions.Distance.meters);
 					cinema.dtempo = distancia.Directions.summaryHtml;
+					cinema.dtempo = cinema.dtempo.replace('&nbsp;', ' ');
 				} else {
 					//se por acaso nao vier com a distancia seta uma alta...
 					cinema.distancia = parseInt(999990);
@@ -672,7 +672,7 @@ view = {
 					cinemas_proximos = cinemas_proximos.join(',');
 					
 					rfmg.proximas_sessoes_near_by(cinemas_proximos,function(horarios){
-						if (sessoes === undefined) {
+						if (horarios === undefined) {
 							view.loaderVisible(false);	
 							$('#proximas-sessoes').append('<h2 id="nenhuma_sessao">Nenhuma sessão por enquanto.</h2>');
 							return;
@@ -741,10 +741,6 @@ view = {
 			endereco = endereco + '<span class="site"><a href="'+ site + '">Site oficial</a></span>';
 		};
 		
-		if (distancia != 'null' && distancia != '') {
-			endereco = endereco + '<span class="distancia">Distância: ' + distancia + '</span>';
-		};
-					
 		$('#cinema h2').text(nome);
 		endereco = endereco.split(',');
 		if (endereco[3] === undefined) {
@@ -754,6 +750,10 @@ view = {
 		}
 		endereco = endereco[0] + ', '+ endereco[1] + '<br />' + endereco[2] + endereco[3];
 		
+		if (distancia != 'null' && distancia != '') {
+			endereco = endereco + '<span class="distancia">Distância: ' + distancia + '</span>';
+		};
+				
 		$('#cinema #endereco_cinema').html(endereco);
 		$('#endereco_cinema_label').show();
 		
@@ -939,7 +939,7 @@ view = {
 					telefone = $(this).attr('alt');
 					site = $(this).attr('rel');
 					distancia = $(this).attr('rev');
-					
+
 					view.filmes_cinema(id, nome, endereco, telefone, site, distancia);
 					
 					jqt.goTo('#cinema');
@@ -1006,7 +1006,6 @@ var jqt = new $.jQTouch({
 });
 
 $(function (){
-	
 	if(navigator.onLine == true){ 
 		//tenta recuperar a localizacao do usuario
 		$('#home ul').hide();
