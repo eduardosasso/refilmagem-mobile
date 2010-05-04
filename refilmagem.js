@@ -1005,20 +1005,20 @@ $(function (){
 		$('#home ul').hide();
 		view.loaderVisible(true);	
 
-		navigator.geolocation.getCurrentPosition(function(p) {
-			latlong = p.coords.latitude + ',' + p.coords.longitude;
-			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
-				view.init(latlong,cidade);
-			});
-		}, 
-		function(){
-			cidade = 'São Paulo';
-			view.init(null,cidade);
-		});
+		// navigator.geolocation.getCurrentPosition(function(p) {
+		// 			latlong = p.coords.latitude + ',' + p.coords.longitude;
+		// 			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
+		// 				view.init(latlong,cidade);
+		// 			});
+		// 		}, 
+		// 		function(){
+		// 			cidade = 'São Paulo';
+		// 			view.init(null,cidade);
+		// 		});
 
 		//para debug
-		// cidade = 'Porto Alegre';
-		// 		view.init('-30.02167427,-51.16154187',cidade);
+		cidade = 'Porto Alegre';
+		view.init('-30.02167427,-51.16154187',cidade);
 
 		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 			view.loaderVisible(true);
