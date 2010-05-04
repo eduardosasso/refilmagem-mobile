@@ -271,6 +271,12 @@ a.abduzeedo {
     -webkit-border-radius: 8px;
     -webkit-box-shadow: 0px 0px 2px #000;
 }
+h3#trailer_label a {
+	background: url(img/seta2.png) right 7px no-repeat;
+	padding-right: 18px;
+	color: #FFF;
+	text-decoration: none;
+}
 #trailer {
 	text-align: center;
 	background: #000;
