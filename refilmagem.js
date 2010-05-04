@@ -492,7 +492,7 @@ view = {
 		$('#poster').addClass('loading');
 
 		$('#horarios, #sinopse, #resto_sinopse, #estrelas, #detalhes p').empty();
-		$('#titulo_original, #tempo, #classificacao, #genero, #formato, #trailer').hide();
+		$('#titulo_original, #tempo, #classificacao, #genero, #formato, #trailer, #trailer_label').hide();
 		
 		rfmg.filme(nid, function(filme){
 			filme = filme[0];
@@ -632,10 +632,18 @@ view = {
 			video_id = jQuery.url.param("v");
 			
 			if (video.search(/youtube/) >= 0) {
-				$('#trailer').html('<embed src="http://www.youtube.com/v/' + video_id + '&hl=pt_BR&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="231" height="143"></embed>');
+				$('#trailer_label').show();
+				$('#trailer_label').html('<a href="#" id="trailer_link">Trailer</a>');
+								
+				$('#trailer_link').click(function(){
+					$('#trailer').html('<embed src="http://www.youtube.com/v/' + video_id + '&hl=pt_BR&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="231" height="143"></embed>');
+					$('#trailer').show();
+					$('#trailer_label').text('Trailer');
+					return false;
+				});				
 			} else {
 				$('#trailer, #trailer_label').hide();
-			}		
+			}
 		});
 	},
 	
@@ -1004,20 +1012,20 @@ $(function (){
 		$('#home ul').hide();
 		view.loaderVisible(true);	
 
-		// navigator.geolocation.getCurrentPosition(function(p) {
-		// 			latlong = p.coords.latitude + ',' + p.coords.longitude;
-		// 			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
-		// 				view.init(latlong,cidade);
-		// 			});
-		// 		}, 
-		// 		function(){
-		// 			cidade = 'São Paulo';
-		// 			view.init(null,cidade);
-		// 		});
+		navigator.geolocation.getCurrentPosition(function(p) {
+			latlong = p.coords.latitude + ',' + p.coords.longitude;
+			rfmg.nome_cidade_coords(p.coords.latitude, p.coords.longitude, function(cidade){
+				view.init(latlong,cidade);
+			});
+		}, 
+		function(){
+			cidade = 'São Paulo';
+			view.init(null,cidade);
+		});
 
 		//para debug
-		cidade = 'Porto Alegre';
-		view.init('-30.02167427,-51.16154187',cidade);
+		// cidade = 'Porto Alegre';
+		// view.init('-30.02167427,-51.16154187',cidade);
 
 		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 			view.loaderVisible(true);
@@ -1034,18 +1042,12 @@ $(function (){
 
 		$('#filmes-em-cartaz').bind('pageAnimationEnd', function(e, info){
 			if (info.direction == 'out') return;
-
 			view.filmes_em_cartaz();
-
 		});
 
 		$('#home').bind('pageAnimationEnd', function(e, info){
 			if (info.direction == 'out') return;
 			$('h2', $(this)).text(view.minha_cidade().nome);
-		});
-		
-		$('#trailer_link').click(function(){
-			$('#trailer').show();
 		});
 		
 		$('#endereco_cinema_label').click(function(){

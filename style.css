@@ -1,0 +1,153 @@
+*{margin:0;padding:0}a{-webkit-tap-highlight-color:rgba(0,0,0,0)}body{overflow-x:hidden;-webkit-user-select:none;-webkit-text-size-adjust:none;font-family:Helvetica;-webkit-perspective:800;-webkit-transform-style:preserve-3d}.selectable,input,textarea{-webkit-user-select:auto}body>*{-webkit-backface-visibility:hidden;-webkit-box-sizing:border-box;display:none;position:absolute;left:0;width:100%;-webkit-transform:translate3d(0,0,0) rotate(0) scale(1);min-height:100%;overflow-x:hidden}body.fullscreen>*{min-height:460px !important}body.fullscreen.black-translucent>*{min-height:480px !important}body.landscape>*{min-height:320px}body>.current{display:block !important}.in,.out{-webkit-animation-timing-function:ease-in-out;-webkit-animation-duration:350ms}.slide.in{-webkit-animation-name:slideinfromright}.slide.out{-webkit-animation-name:slideouttoleft}.slide.in.reverse{-webkit-animation-name:slideinfromleft}.slide.out.reverse{-webkit-animation-name:slideouttoright}@-webkit-keyframes
+slideinfromright{from{-webkit-transform:translateX(100%)}to{-webkit-transform:translateX(0)}}@-webkit-keyframes
+slideinfromleft{from{-webkit-transform:translateX(-100%)}to{-webkit-transform:translateX(0)}}@-webkit-keyframes
+slideouttoleft{from{-webkit-transform:translateX(0)}to{-webkit-transform:translateX(-100%)}}@-webkit-keyframes
+slideouttoright{from{-webkit-transform:translateX(0)}to{-webkit-transform:translateX(100%)}}@-webkit-keyframes
+fadein{from{opacity:0}to{opacity:1}}@-webkit-keyframes
+fadeout{from{opacity:1}to{opacity:0}}.fade.in{z-index:10;-webkit-animation-name:fadein}.fade.out{z-index:0}.dissolve.in{-webkit-animation-name:fadein}.dissolve.out{-webkit-animation-name:fadeout}.flip{-webkit-animation-duration: .65s}.flip.in{-webkit-animation-name:flipinfromleft}.flip.out{-webkit-animation-name:flipouttoleft}.flip.in.reverse{-webkit-animation-name:flipinfromright}.flip.out.reverse{-webkit-animation-name:flipouttoright}@-webkit-keyframes
+flipinfromright{from{-webkit-transform:rotateY(-180deg) scale(.8)}to{-webkit-transform:rotateY(0) scale(1)}}@-webkit-keyframes
+flipinfromleft{from{-webkit-transform:rotateY(180deg) scale(.8)}to{-webkit-transform:rotateY(0) scale(1)}}@-webkit-keyframes
+flipouttoleft{from{-webkit-transform:rotateY(0) scale(1)}to{-webkit-transform:rotateY(-180deg) scale(.8)}}@-webkit-keyframes
+flipouttoright{from{-webkit-transform:rotateY(0) scale(1)}to{-webkit-transform:rotateY(180deg) scale(.8)}}.slideup.in{-webkit-animation-name:slideup;z-index:10}.slideup.out{-webkit-animation-name:dontmove;z-index:0}.slideup.out.reverse{z-index:10;-webkit-animation-name:slidedown}.slideup.in.reverse{z-index:0;-webkit-animation-name:dontmove}@-webkit-keyframes
+slideup{from{-webkit-transform:translateY(100%)}to{-webkit-transform:translateY(0)}}@-webkit-keyframes
+slidedown{from{-webkit-transform:translateY(0)}to{-webkit-transform:translateY(100%)}}@-webkit-keyframes
+dontmove{from{opacity:1}to{opacity:1}}.swap{-webkit-transform:perspective(800);-webkit-animation-duration: .7s}.swap.out{-webkit-animation-name:swapouttoleft}.swap.in{-webkit-animation-name:swapinfromright}.swap.out.reverse{-webkit-animation-name:swapouttoright}.swap.in.reverse{-webkit-animation-name:swapinfromleft}@-webkit-keyframes
+swapouttoright{0%{-webkit-transform:translate3d(0px, 0px, 0px) rotateY(0deg);-webkit-animation-timing-function:ease-in-out}50%{-webkit-transform:translate3d(-180px, 0px, -400px) rotateY(20deg);-webkit-animation-timing-function:ease-in}100%{-webkit-transform:translate3d(0px, 0px, -800px) rotateY(70deg)}}@-webkit-keyframes
+swapouttoleft{0%{-webkit-transform:translate3d(0px, 0px, 0px) rotateY(0deg);-webkit-animation-timing-function:ease-in-out}50%{-webkit-transform:translate3d(180px, 0px, -400px) rotateY(-20deg);-webkit-animation-timing-function:ease-in}100%{-webkit-transform:translate3d(0px, 0px, -800px) rotateY(-70deg)}}@-webkit-keyframes
+swapinfromright{0%{-webkit-transform:translate3d(0px, 0px, -800px) rotateY(70deg);-webkit-animation-timing-function:ease-out}50%{-webkit-transform:translate3d(-180px, 0px, -400px) rotateY(20deg);-webkit-animation-timing-function:ease-in-out}100%{-webkit-transform:translate3d(0px, 0px, 0px) rotateY(0deg)}}@-webkit-keyframes
+swapinfromleft{0%{-webkit-transform:translate3d(0px, 0px, -800px) rotateY(-70deg);-webkit-animation-timing-function:ease-out}50%{-webkit-transform:translate3d(180px, 0px, -400px) rotateY(-20deg);-webkit-animation-timing-function:ease-in-out}100%{-webkit-transform:translate3d(0px, 0px, 0px) rotateY(0deg)}}.cube{-webkit-animation-duration: .55s}.cube.in{-webkit-animation-name:cubeinfromright;-webkit-transform-origin:0% 50%}.cube.out{-webkit-animation-name:cubeouttoleft;-webkit-transform-origin:100% 50%}.cube.in.reverse{-webkit-animation-name:cubeinfromleft;-webkit-transform-origin:100% 50%}.cube.out.reverse{-webkit-animation-name:cubeouttoright;-webkit-transform-origin:0% 50%}@-webkit-keyframes
+cubeinfromleft{from{-webkit-transform:rotateY(-90deg) translateZ(320px);opacity: .5}to{-webkit-transform:rotateY(0deg) translateZ(0);opacity:1}}@-webkit-keyframes
+cubeouttoright{from{-webkit-transform:rotateY(0deg) translateX(0);opacity:1}to{-webkit-transform:rotateY(90deg) translateZ(320px);opacity: .5}}@-webkit-keyframes
+cubeinfromright{from{-webkit-transform:rotateY(90deg) translateZ(320px);opacity: .5}to{-webkit-transform:rotateY(0deg) translateZ(0);opacity:1}}@-webkit-keyframes
+cubeouttoleft{from{-webkit-transform:rotateY(0deg) translateZ(0);opacity:1}to{-webkit-transform:rotateY(-90deg) translateZ(320px);opacity: .5}}.pop{-webkit-transform-origin:50% 50%}.pop.in{-webkit-animation-name:popin;z-index:10}.pop.out.reverse{-webkit-animation-name:popout;z-index:10}.pop.in.reverse{z-index:0;-webkit-animation-name:dontmove}@-webkit-keyframes
+popin{from{-webkit-transform:scale(.2);opacity:0}to{-webkit-transform:scale(1);opacity:1}}@-webkit-keyframes
+popout{from{-webkit-transform:scale(1);opacity:1}to{-webkit-transform:scale(.2);opacity:0}}body{background:#EDEDED url(/refilmagem/www/themes/apple/img/bg_stripes2.png) left top repeat;padding-bottom:30px !important;margin-bottom:30px !important}h1,h2,h3{font:bold 16px Helvetica;text-shadow:2px 2px 1px #222;color:#FFF;margin:12px
+20px 12px}#home
+h2{line-height:22px;font-size:18px;background:url(/refilmagem/www/themes/apple/img/pin_cidade.png) left center no-repeat;padding-left:24px}#home h2.no-internet{background:none;padding-left:0}#cinema
+h2{margin-bottom:0}#endereco_cinema_label{color:#999;text-decoration:none;font-size:12px;text-shadow:0px -1px 0px #000;margin:0
+20px;background:url(/refilmagem/www/themes/apple/img/seta.png) right center no-repeat;padding-right:15px}#endereco_cinema_label:hover{color:#FFF}#filme
+h2{line-height:22px;font-size:18px}.clear{clear:both}.toolbar{padding:10px;height:24px;background:url(/refilmagem/www/themes/apple/img/bg_header.jpg) left bottom repeat-x;position:relative;border:none}span.home{display:block;width:15px;text-indent: -9000px;background:url(/refilmagem/www/themes/apple/img/icon_home.png) center 7px no-repeat}span.about{display:block;width:16px;text-indent: -9000px;background:url(/refilmagem/www/themes/apple/img/icon_info5.png) center 7px no-repeat}.black-translucent
+.toolbar{margin-top:20px}.toolbar>h1{position:absolute;overflow:hidden;left:50%;top:11px;line-height:1em;margin:1px
+0 0 -75px;height:40px;font-size:20px;width:150px;font-weight:bold;text-shadow:rgba(0, 0, 0, 0.4) 0px -1px 0;text-align:center;text-overflow:ellipsis;white-space:nowrap;color:#fff;background:url(/refilmagem/www/themes/apple/img/icon_refilmagem.png) center top no-repeat;text-indent: -9000px;margin-top: -2px}body.landscape .toolbar>h1{margin-left: -125px;width:250px}.button,.back,.cancel,.add{position:absolute;overflow:hidden;top:8px;right:6px;margin:0;border-width:0px 5px;padding:0
+3px;width:auto;height:30px;line-height:30px;font-family:inherit;font-size:12px;font-weight:bold;color:#fff;text-shadow:rgba(0, 0, 0, 0.5) 0px -1px 0;text-overflow:ellipsis;text-decoration:none;white-space:nowrap;background:none !important;-moz-border-image:url(/refilmagem/www/themes/apple/img/toolButton.png) 0 5 0 5;-webkit-border-image:url(/refilmagem/www/themes/apple/img/toolButton.png) 0 5 0 5}.button:hover,.cancel:hover,.add:hover{-webkit-border-image:url(/refilmagem/www/themes/apple/img/toolButton_hover.png) 0 5 0 5}.button:active,.cancel:active,.add:active,.grayButton:active,.button.active,.cancel.active,.add.active,.grayButton.active{-webkit-border-image:url(/refilmagem/www/themes/apple/img/toolButton_active.png) 0 5 0 5}.blueButton{-webkit-border-image:url(/refilmagem/www/themes/apple/img/blueButton.png) 0 5 0 5;border-width:0 5px}.back{left:6px;right:auto;padding:0;max-width:55px;border-width:0 8px 0 14px;-webkit-border-image:url(/refilmagem/www/themes/apple/img/backButton.png) 0 8 0 14;-moz-border-image:url(/refilmagem/www/themes/apple/img/backButton.png) 0 8 0 14}.back:active{-webkit-border-image:url(/refilmagem/www/themes/apple/img/backButton_active.png) 0 8 0 14 !important}.back:hover{-webkit-border-image:url(/refilmagem/www/themes/apple/img/backButton_hover.png) 0 8 0 14}.leftButton,.cancel{left:6px;right:auto}.add{font-size:24px;line-height:24px;font-weight:bold}.whiteButton,.grayButton{border-width:0px 5px;padding:0
+3px;width:auto;height:30px;line-height:30px;display:block;text-align:center;font-size:14px;font-weight:bold;text-decoration:inherit;color:inherit}.whiteButton{-webkit-border-image:url(/refilmagem/www/themes/apple/img/whiteButton.png) 0 12 0 12;text-shadow:rgba(255, 255, 255, 0.7) 0 1px 0}.grayButton{-webkit-border-image:url(/refilmagem/www/themes/apple/img/toolButton2.png) 0 5 0 5;color:#FFF;margin:0
+10px 10px}#about
+div#fechar{margin-bottom:20px}h1+ul,h2+ul,h3+ul,h4+ul,h5+ul,h6+ul{margin-top:0}.txt_
+p{font-size:13px;line-height:18px}.txt_
+p.perfil{border-bottom:1px solid #d9d9d9;padding-bottom:10px;margin-bottom:10px;padding-left:112px;background:url(/refilmagem/www/themes/apple/img/foto_duda.jpg) left top no-repeat}.txt_ p.perfil
+a.link_twitter{display:block;color:#666;text-decoration:none;margin-bottom:8px}#about
+p.links{height:16px;margin-top:15px}#about p.links
+a{display:block;width:20px;height:17px;float:right;text-indent: -9000px;margin-left:5px}#about p.links
+a.fb{background:url(/refilmagem/www/themes/apple/img/icon_fb.png) left top no-repeat}#about p.links
+a.tw{background:url(/refilmagem/www/themes/apple/img/icon_tw.png) left top no-repeat}#about p.links
+a.ml{background:url(/refilmagem/www/themes/apple/img/icon_ml.png) left top no-repeat}a.zee{display:block;width:76px;height:37px;background:url(/refilmagem/www/themes/apple/img/logo_zee.jpg) left top no-repeat;text-indent: -9000px;margin:10px
+0 10px 15px;float:left}a.abduzeedo{display:block;width:147px;height:37px;background:url(/refilmagem/www/themes/apple/img/logo_abduzeedo.jpg) left top no-repeat;text-indent: -9000px;margin:10px
+15px 10px 0;float:right}.txt_,#trailer,#endereco_cinema,#horarios{color:#333;background:#fff;font:11px Helvetica;line-height:15px;padding:10px;margin:12px
+10px 17px 10px;-webkit-border-radius:8px;-webkit-box-shadow:0px 0px 2px #000}h3#trailer_label
+a{background:url(/refilmagem/www/themes/apple/img/seta2.png) right 7px no-repeat;padding-right:18px;color:#FFF;text-decoration:none}#trailer{text-align:center;background:#000;height:143px;overflow:hidden}#endereco_cinema{font-size:13px;line-height:20px}#endereco_cinema
+.telefone{display:block;background:url(/refilmagem/www/themes/apple/img/icon_phone.png) left 3px no-repeat;padding-left:20px}#endereco_cinema span.site
+a{color:#333;background:url(/refilmagem/www/themes/apple/img/icon_external.png) right 2px no-repeat;padding-right:14px;font-weight:bold}#endereco_cinema span.site a:hover{text-decoration:none}#endereco_cinema
+span.distancia{display:block;color:#333;font-weight:bold;margin-top:10px}#filme h2
+span.detalhes_filme{display:block;padding-top:0;line-height:14px;color:#999}#horarios{padding:8px
+0 10px;line-height:26px}.txt_
+#detalhes{font-weight:bold;border-bottom:1px solid #e8e8e8;padding-bottom:10px;margin-left:130px;font-size:11px;line-height:17px}.txt_ #detalhes
+p{display:inline}.txt_ #detalhes
+div{margin-right:8px}.txt_ #detalhes
+#estrelas{margin:0;width:75px;height:16px}.txt_ #detalhes #estrelas
+.estrela{width:12px;height:12px;display:block;background:url(/refilmagem/www/themes/apple/img/star2.png) !important;float:left;margin:0
+2px 0 0px}.txt_ #detalhes #estrelas .estrela
+div{height:12px;display:block;background:url(/refilmagem/www/themes/apple/img/star2.png) left 24px}#titulo_original
+span{display:block}#titulo_original{display:none;margin-bottom:0px;float:none !important;color:#999}.txt_ #detalhes .meta-label{font-weight:normal}.txt_
+h2{color:#333;font-size:16px;margin:0;text-shadow:none}.txt_
+#poster{float:left;width:121px;height:175px;border:none;margin:0
+10px 10px -3px;background:url(/refilmagem/www/themes/apple/img/bg_shadow.png) !important;padding:4px
+0 0 5px}.txt_ #poster
+img{width:115px;height:165px}.txt_
+#sinopse{margin:10px
+0;font-size:13px;line-height:17px}.txt_ #sinopse
+p{margin-bottom:12px}.txt_ #sinopse a:link,
+.txt_ #sinopse a:active,
+.txt_ #sinopse a:visited{color:#333;font-weight:bold}.txt_ #sinopse a:hover{text-decoration:none}#filme
+.cinema{padding:0;font-size:12px;font-weight:bold}#filme
+ul.nome_cinema{margin:0px;-webkit-border-radius:0px;-webkit-box-shadow:none;font-size:12px}#filme ul.nome_cinema li,
+#filme ul.nome_cinema li
+a{padding-bottom:11px !important;padding-top:11px !important;font-size:14px}#filme ul.nome_cinema
+a.active{-webkit-border-radius:0px !important}#filme
+ul.horarios_cinema{padding:0px
+0 6px 10px;margin:0px;-webkit-border-radius:0px;-webkit-box-shadow:none;border-bottom:1px solid #D9D9D9;background:#f0f0f0}#filme ul.horarios_cinema
+li{border-top:0;list-style-type:none;padding:0
+6px !important;display:block;float:left;font-size:12px;font-weight:bold;margin:8px
+10px 0px 0px;-webkit-border-radius:3px !important;line-height:18px;background:url(/refilmagem/www/themes/apple/img/bg_time.jpg);height:17px;color:#333;text-shadow:0 1px 0 #FFF;-webkit-box-shadow:0px 1px 2px #666}#filme ul.horarios_cinema
+li.movie_started{border-top:0;list-style-type:none;padding:0
+6px !important;display:block;float:left;font-size:12px;font-weight:x;margin:8px
+10px 0px 0px;-webkit-border-radius:3px !important;line-height:18px;background:#fafafa;height:17px;color:#CCC;text-shadow:0 1px 0 #FFF;-webkit-box-shadow:0px 1px 0px #FFF}#filme ul.horarios_cinema
+li.clear{display:block !important;clear:both !important;height:1px;-webkit-box-shadow:none !important;float:none;line-height:1px;border:none !important;background:none !important;margin-bottom:2px !important;text-indent: -9000px}ul{color:#333;background:#fff;font:bold 15px Helvetica;padding:0;margin:15px
+10px 17px 10px;-webkit-border-radius:8px;-webkit-box-shadow:0px 0px 3px #000}ul
+li{color:#666;border-top:1px solid #D9D9D9;list-style-type:none;padding:10px
+10px 10px 10px}ul li
+span{padding-left:24px}ul li
+span.cidade_default{background:url(/refilmagem/www/themes/apple/img/check3.png) right center no-repeat;display:block}#cidades ul li
+span{padding:0}ul li span.filmes-cartaz{background:url(/refilmagem/www/themes/apple/img/icon_filmes.png) left top no-repeat}ul li
+span.cinemas{background:url(/refilmagem/www/themes/apple/img/icon_cinemas.png) left top no-repeat}ul li span.proximas-sessoes{background:url(/refilmagem/www/themes/apple/img/icon_horarios.png) left top no-repeat}ul li span.outras-cidades{background:url(/refilmagem/www/themes/apple/img/icon_cidade.png) left top no-repeat}#cidades ul li
+a.default{}span.detalhes_filme{padding:4px
+0 0 0;font-size:12px;font-weight:normal;color:#666}li:first-child, li:first-child
+a{border-top:0;-webkit-border-top-left-radius:8px;-webkit-border-top-right-radius:8px}li:last-child, li:last-child
+a{-webkit-border-bottom-left-radius:8px;-webkit-border-bottom-right-radius:8px}ul
+li.arrow{background-image:url(/refilmagem/www/themes/apple/img/chevron.png);background-position:right center;background-repeat:no-repeat}#plastic ul li.arrow, #metal ul
+li.arrow{background-image:url(/refilmagem/www/themes/images/chevron_dg.png);background-position:right center;background-repeat:no-repeat}ul li a, li.img a+a{color:#303030;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;padding:12px
+40px 12px 10px;margin: -10px;-webkit-tap-highlight-color:rgba(0,0,0,0)}ul li
+a.active{background:#ECB20A url(/refilmagem/www/themes/apple/img/selection_yellow.png) 0 0 repeat-x;text-shadow:0px 1px 0px #FFD31D}ul li
+a.button{background-color:#ECB20A}ul li.img a+a{margin: -10px 10px -20px -5px;font-size:17px;font-weight:bold}ul li.img a+a+a{font-size:14px;font-weight:normal;margin-left: -10px;margin-bottom: -10px;margin-top:0}ul li.img a+small+a{margin-left: -5px}ul li.img a+small+a+a{margin-left: -10px;margin-top: -20px;margin-bottom: -10px;font-size:14px;font-weight:normal}ul li.img a+small+a+a+a{margin-left:0px !important;margin-bottom:0}ul li a+a{color:#000;font:14px Helvetica;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;margin:0;padding:0}ul li a + a + a, ul li.img a + a + a + a, ul li.img a+small+a+a+a{color:#666;font:13px Helvetica;margin:0;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;padding:0}ul.form
+li{padding:7px
+10px}ul.form
+li.error{border:2px
+solid red}ul.form li.error+li.error{border-top:0}ul.form li:hover{background:#fff}ul li input[type="text"], ul li input[type="password"], ul li textarea, ul li
+select{color:#777;background:#fff url(/refilmagem/www/themes/.png);border:0;font:normal 17px Helvetica;padding:0;display:inline-block;margin-left:0px;width:100%;-webkit-appearance:textarea}ul li
+textarea{height:120px;padding:0;text-indent: -2px}ul li
+select{text-indent:0px;background:transparent url(/refilmagem/www/themes/images/chevron.png) no-repeat 103% 3px;-webkit-appearance:textfield;margin-left: -6px;width:104%}ul li input[type="checkbox"], ul li input[type="radio"]{margin:0;color:rgb(50,79,133);padding:10px
+10px}ul li input[type="checkbox"]:after, ul li input[type="radio"]:after{content:attr(title);font:17px Helvetica;display:block;width:246px;margin: -12px 0 0 17px}.edgetoedge
+h4{color:#fff;background:rgb(154,159,170) url(/refilmagem/www/themes/apple/img/listGroup.png) top left repeat-x;border-top:1px solid rgb(165,177,186);text-shadow:#666 0 1px 0;margin:0;padding:2px
+10px}.edgetoedge,.metal{margin:0;padding:0;background-color:rgb(255,255,255)}.edgetoedge ul, .metal ul, .plastic
+ul{-webkit-border-radius:0;margin:0;border-left:0;border-right:0;border-top:0}.metal
+ul{border-top:0;border-bottom:0;background:rgb(180,180,180)}.edgetoedge ul li:first-child, .edgetoedge ul li:first-child a, .edgetoedge ul li:last-child, .edgetoedge ul li:last-child a, .metal ul li:first-child a, .metal ul li:last-child
+a{-webkit-border-radius:0}.edgetoedge ul li
+small{font-size:16px;line-height:28px}.edgetoedge li, .metal
+li{-webkit-border-radius:0}.edgetoedge li
+em{font-weight:normal;font-style:normal}.edgetoedge h4+ul{border-top:1px solid rgb(152,158,164);border-bottom:1px solid rgb(113,125,133)}ul li
+small{color:#369;font:17px Helvetica;text-align:right;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;width:23%;float:right;padding:3px
+0px}ul li.arrow
+small{padding:0
+15px}ul li
+small.counter{font-size:17px !important;line-height:13px !important;font-weight:bold;background:rgb(154,159,170);color:#fff;-webkit-border-radius:11px;padding:4px
+10px 5px 10px;display:inline !important;width:auto;margin-top: -22px}ul li.arrow
+small.counter{margin-right:15px}#plastic ul li.arrow, #metal ul
+li.arrow{background-image:url(/refilmagem/www/themes/apple/img/listArrow.png);background-position:right center;background-repeat:no-repeat}.edgetoedge ul, .metal ul, .plastic
+ul{-webkit-border-radius:0;margin:0;border-left:0;border-right:0;border-top:0}.metal ul
+li{border-top:1px solid rgb(238,238,238);border-bottom:1px solid rgb(156,158,165);background:url(/refilmagem/www/themes/images/bgMetal.png) top left repeat-x;font-size:26px;text-shadow:#fff 0 1px 0}.metal ul li
+a{line-height:26px;margin:0;padding:13px
+0}.metal ul li a:hover{color:rgb(0,0,0)}.metal ul li:hover
+small{color:inherit}.metal ul li a
+em{display:block;font-size:14px;font-style:normal;color:#444;width:50%;line-height:14px}.metal ul li
+small{float:right;position:relative;margin-top:10px;font-weight:bold}.metal ul li.arrow a
+small{padding-right:0;line-height:17px}.metal ul
+li.arrow{background:url(/refilmagem/www/themes/images/bgMetal.png) top left repeat-x,
+url(/refilmagem/www/themes/images/chevron_dg.png) right center no-repeat}.plastic{margin:0;padding:0;background:rgb(173,173,173)}.plastic
+ul{-webkit-border-radius:0;margin:0;border-left:0;border-right:0;border-top:0;background-color:rgb(173,173,173)}.plastic ul
+li{-webkit-border-radius:0;border-top:1px solid rgb(191,191,191);border-bottom:1px solid rgb(157,157,157)}.plastic ul li:nth-child(odd){background-color:rgb(152,152,152);border-top:1px solid rgb(181,181,181);border-bottom:1px solid rgb(138,138,138)}.plastic ul+p{font-size:11px;color:#2f3237;text-shadow:none;padding:10px
+10px}.plastic ul + p
+strong{font-size:14px;line-height:18px;text-shadow:#fff 0 1px 0}.plastic ul li
+a{text-shadow:rgb(211,211,211) 0 1px 0}.plastic ul li:nth-child(odd) a{text-shadow:rgb(191,191,191) 0 1px 0}.plastic ul li
+small{color:#3C3C3C;text-shadow:rgb(211,211,211) 0 1px 0;font-size:13px;font-weight:bold;text-transform:uppercase;line-height:24px}#plastic ul.minibanner, #plastic
+ul.bigbanner{margin:10px;border:0;height:81px;clear:both}#plastic
+ul.bigbanner{height:140px !important}#plastic ul.minibanner
+li{border:1px
+solid rgb(138,138,138);background-color:rgb(152,152,152);width:145px;height:81px;float:left;-webkit-border-radius:5px;padding:0}#plastic ul.bigbanner
+li{border:1px
+solid rgb(138,138,138);background-color:rgb(152,152,152);width:296px;height:140px;float:left;-webkit-border-radius:5px;padding:0;margin-bottom:4px}#plastic ul.minibanner li:first-child{margin-right:6px}#plastic ul.minibanner li
+a{color:transparent;text-shadow:none;display:block;width:145px;height:81px}#plastic ul.bigbanner li
+a{color:transparent;text-shadow:none;display:block;width:296px;height:145px}ul.individual{border:0;background:none;clear:both;overflow:hidden}ul.individual
+li{color:rgb(183,190,205);background:white;border:1px
+solid rgb(180,180,180);font-size:14px;text-align:center;-webkit-border-radius:8px;-webkit-box-sizing:border-box;width:48%;float:left;display:block;padding:11px
+10px 14px 10px}ul.individual li+li{float:right}ul.individual li
+a{color:rgb(50,79,133);line-height:16px;margin: -11px -10px -14px -10px;padding:11px
+10px 14px 10px;-webkit-border-radius:8px}ul.individual li a:hover{color:#fff;background:#36c}.toggle{width:94px;position:relative;height:27px;display:block;overflow:hidden;float:right}.toggle input[type="checkbox"]:checked{left:0px}.toggle input[type="checkbox"]{-webkit-tap-highlight-color:rgba(0,0,0,0);margin:0;-webkit-border-radius:5px;background:#fff url(/refilmagem/www/themes/apple/img/on_off.png) 0 0 no-repeat;height:27px;overflow:hidden;width:149px;border:0;-webkit-appearance:textarea;background-color:transparent;-webkit-transition:left .15s;position:absolute;top:0;left: -55px}.info{background:#dce1eb;font-size:12px;line-height:16px;text-align:center;text-shadow:rgba(255,255,255,.8) 0 1px 0;color:rgb(76, 86, 108);padding:15px;border-top:1px solid rgba(76,86,108,.3);font-weight:bold}div#loader{-webkit-box-shadow:rgba(0,0,0, .5) 0px 1px 1px;width:100%;height:480px;background:url("/refilmagem/www/themes/apple/img/loading.gif") no-repeat scroll 50% 50% #000;opacity:0.75}
