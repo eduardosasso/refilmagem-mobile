@@ -10,10 +10,10 @@
 		<style type="text/css" media="screen">@import "themes/apple/theme.min.css";</style>
 
 		<script type="text/javascript" charset="utf-8" src="jquery-1.4.2.min.js"></script>
-		<!-- <script type="text/javascript" charset="utf-8" src="jquery.url.packed.js"></script>
+		<script type="text/javascript" charset="utf-8" src="jquery.url.packed.js"></script>
         <script src="jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>        
-        <script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>     -->
-		<script src="scripts.js" type="application/x-javascript" charset="utf-8"></script>
+        <script src="refilmagem.js" type="application/x-javascript" charset="utf-8"></script>    
+		<!-- <script src="scripts.js" type="application/x-javascript" charset="utf-8"></script> -->
     </head>
     <body>
 		<div id="home">
@@ -21,17 +21,6 @@
                 <h1>Refilmagem</h1>
                 <a class="button flip" href="#about"><span class="about">About</span></a>
             </div>
-			<!-- <script type="text/javascript">
-			var admob_vars = {
-			 pubid: 'a14bd855229411b', // publisher id
-			 bgcolor: '222', // background color (hex)
-			 text: 'fff', // font-color (hex)
-			 ama: false, // set to true and retain comma for the AdMob Adaptive Ad Unit, a special ad type designed for PC sites accessed from the iPhone.  More info: http://developer.admob.com/wiki/IPhone#Web_Integration
-			 test: true // test mode, set to false to receive live ads
-			};
-			</script>
-			<script type="text/javascript" src="http://mmv.admob.com/static/iphone/iadmob.js"></script> -->
-
 			<h2></h2>
             <ul class="rounded">
 				<li class="arrow"><a href="#filmes-em-cartaz"><span class="filmes-cartaz">Filmes em Cartaz</span></a></li>
@@ -41,6 +30,16 @@
 			<ul>
 				<li class="arrow"><a href="#cidades"><span class="outras-cidades">Outras Cidades</span></a></li>
 			</ul>
+			<script type="text/javascript">
+			var admob_vars = {
+			 pubid: 'a14bd855229411b', // publisher id
+			 bgcolor: '222', // background color (hex)
+			 text: 'fff', // font-color (hex)
+			 ama: false, // set to true and retain comma for the AdMob Adaptive Ad Unit, a special ad type designed for PC sites accessed from the iPhone.  More info: http://developer.admob.com/wiki/IPhone#Web_Integration
+			 test: false // test mode, set to false to receive live ads
+			};
+			</script>
+			<script type="text/javascript" src="http://mmv.admob.com/static/iphone/iadmob.js"></script>			
 		</div>
 		
 		<div id="about">

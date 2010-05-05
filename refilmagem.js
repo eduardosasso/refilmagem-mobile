@@ -817,13 +817,13 @@ view = {
 	
 	filmes_em_cartaz: function(){
         view.loaderVisible(true);
+
 		if (view.grava_cache('filmes_em_cartaz')) {
 	        view.loaderVisible(false);
 			return;
 		}
-
+		
 		$('#filmes-em-cartaz ul').empty();
-		$('#filmes-em-cartaz h2').hide();
 		
 		var items_estreias = [];		
 		rfmg.estreias_da_semana(cidade,function(estreias){
@@ -1026,7 +1026,7 @@ $(function (){
 		// cidade = 'Porto Alegre';
 		// view.init('-30.02167427,-51.16154187',cidade);
 
-		$('#proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
+		$('#home ul, #proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 			view.loaderVisible(true);
 		});
 
