@@ -1,9 +1,15 @@
 /* @override themes/apple/theme.css -- http://m.refilmagem.com.br/themes/apple/theme.css */
 
 body {
-    background: #EDEDED url(img/bg_stripes2.png) left top repeat;
-    padding-bottom: 30px !important;
-    margin-bottom: 30px !important;
+    background: #EDEDED url(img/bg_stripes2.png) left top repeat;  
+}
+body #home div.ads {
+	background: #222;
+	height: 48px !important;
+	display: block !important;
+	width: 100%;
+	position: absolute;
+	top: 432px;
 }
 h1, h2, h3{
     font: bold 16px Helvetica;
@@ -20,6 +26,9 @@ h1, h2, h3{
 #home h2.no-internet{
 	background:none;
 	padding-left: 0;
+}
+div.use-bottom-toolbar {
+	
 }
 #cinema h2 {
 	margin-bottom: 0;

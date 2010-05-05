@@ -22,14 +22,26 @@
                 <a class="button flip" href="#about"><span class="about">About</span></a>
             </div>
 			<h2></h2>
-            <ul class="rounded">
+			<ul class="rounded">
 				<li class="arrow"><a href="#filmes-em-cartaz"><span class="filmes-cartaz">Filmes em Cartaz</span></a></li>
 				<li class="arrow"><a href="#proximas-sessoes"><span class="proximas-sessoes">Próximas Sessões</span></a></li>
-            	<li class="arrow"><a href="#cinemas"><span class="cinemas">Cinemas</span></a></li>            	
-            </ul>
+				<li class="arrow"><a href="#cinemas"><span class="cinemas">Cinemas</span></a></li>            	
+			</ul>
 			<ul>
 				<li class="arrow"><a href="#cidades"><span class="outras-cidades">Outras Cidades</span></a></li>
 			</ul>
+			<div class="ads">
+				<script type="text/javascript">
+				var admob_vars = {
+					pubid: 'a14bd855229411b', // publisher id
+					bgcolor: '222', // background color (hex)
+					text: 'fff', // font-color (hex)
+					ama: false, // set to true and retain comma for the AdMob Adaptive Ad Unit, a special ad type designed for PC sites accessed from the iPhone.  More info: http://developer.admob.com/wiki/IPhone#Web_Integration
+					test: false // test mode, set to false to receive live ads
+				};
+				</script>
+				<script type="text/javascript" src="http://mmv.admob.com/static/iphone/iadmob.js"></script>			
+			</div>
 		</div>
 		
 		<div id="about">
@@ -82,7 +94,7 @@
             </div>
             <ul class="rounded"></ul>
         </div>
-
+		
 		<div id="cinema">
             <div class="toolbar">
                 <h1>Cinema</h1>
@@ -149,20 +161,7 @@
 			<h2>Filmes em cartaz</h2>
 			<ul id="lista_filmes_em_cartaz"></ul>
 		</div>
-		
+			
 		<div id="loader"></div>
-
-		<div class="ads">
-			<script type="text/javascript">
-			var admob_vars = {
-				pubid: 'a14bd855229411b', // publisher id
-				bgcolor: '222', // background color (hex)
-				text: 'fff', // font-color (hex)
-				ama: false, // set to true and retain comma for the AdMob Adaptive Ad Unit, a special ad type designed for PC sites accessed from the iPhone.  More info: http://developer.admob.com/wiki/IPhone#Web_Integration
-				test: false // test mode, set to false to receive live ads
-			};
-			</script>
-			<script type="text/javascript" src="http://mmv.admob.com/static/iphone/iadmob.js"></script>			
-		</div>		
     </body>
 </html>
