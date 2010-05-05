@@ -21,7 +21,7 @@ cubeouttoright{from{-webkit-transform:rotateY(0deg) translateX(0);opacity:1}to{-
 cubeinfromright{from{-webkit-transform:rotateY(90deg) translateZ(320px);opacity: .5}to{-webkit-transform:rotateY(0deg) translateZ(0);opacity:1}}@-webkit-keyframes
 cubeouttoleft{from{-webkit-transform:rotateY(0deg) translateZ(0);opacity:1}to{-webkit-transform:rotateY(-90deg) translateZ(320px);opacity: .5}}.pop{-webkit-transform-origin:50% 50%}.pop.in{-webkit-animation-name:popin;z-index:10}.pop.out.reverse{-webkit-animation-name:popout;z-index:10}.pop.in.reverse{z-index:0;-webkit-animation-name:dontmove}@-webkit-keyframes
 popin{from{-webkit-transform:scale(.2);opacity:0}to{-webkit-transform:scale(1);opacity:1}}@-webkit-keyframes
-popout{from{-webkit-transform:scale(1);opacity:1}to{-webkit-transform:scale(.2);opacity:0}}body{background:#EDEDED url(/refilmagem/www/themes/apple/img/bg_stripes2.png) left top repeat;padding-bottom:30px !important;margin-bottom:30px !important}h1,h2,h3{font:bold 16px Helvetica;text-shadow:2px 2px 1px #222;color:#FFF;margin:12px
+popout{from{-webkit-transform:scale(1);opacity:1}to{-webkit-transform:scale(.2);opacity:0}}body{background:#EDEDED url(/refilmagem/www/themes/apple/img/bg_stripes2.png) left top repeat}h1,h2,h3{font:bold 16px Helvetica;text-shadow:2px 2px 1px #222;color:#FFF;margin:12px
 20px 12px}#home
 h2{line-height:22px;font-size:18px;background:url(/refilmagem/www/themes/apple/img/pin_cidade.png) left center no-repeat;padding-left:24px}#home h2.no-internet{background:none;padding-left:0}#cinema
 h2{margin-bottom:0}#endereco_cinema_label{color:#999;text-decoration:none;font-size:12px;text-shadow:0px -1px 0px #000;margin:0
@@ -34,10 +34,15 @@ h2{line-height:22px;font-size:18px}.clear{clear:both}.toolbar{padding:10px;heigh
 10px 10px}#about
 div#fechar{margin-bottom:20px}h1+ul,h2+ul,h3+ul,h4+ul,h5+ul,h6+ul{margin-top:0}.txt_
 p{font-size:13px;line-height:18px}.txt_
-p.perfil{border-bottom:1px solid #d9d9d9;padding-bottom:10px;margin-bottom:10px;padding-left:112px;background:url(/refilmagem/www/themes/apple/img/foto_duda.jpg) left top no-repeat}.txt_ p.perfil
+p.perfil{border-bottom:1px solid #d9d9d9;padding-bottom:10px;margin-bottom:10px;padding-left:112px}.txt_
+p.eduardo{background:url(/refilmagem/www/themes/apple/img/img_duda.jpg) left top no-repeat}.txt_
+p.gisele{background:url(/refilmagem/www/themes/apple/img/img_gica.jpg) left top no-repeat}.txt_
+p.fabiano{background:url(/refilmagem/www/themes/apple/img/img_fabiano.jpg) left top no-repeat}.txt_
+p.fabio{background:url(/refilmagem/www/themes/apple/img/img_fabio.jpg) left top no-repeat}.txt_
+p.douglas{background:url(/refilmagem/www/themes/apple/img/img_douglas.jpg) left top no-repeat}.txt_ p.perfil
 a.link_twitter{display:block;color:#666;text-decoration:none;margin-bottom:8px}#about
 p.links{height:16px;margin-top:15px}#about p.links
-a{display:block;width:20px;height:17px;float:right;text-indent: -9000px;margin-left:5px}#about p.links
+a{display:block;width:20px;height:17px;float:right;text-indent: -9000px;margin-left:12px}#about p.links
 a.fb{background:url(/refilmagem/www/themes/apple/img/icon_fb.png) left top no-repeat}#about p.links
 a.tw{background:url(/refilmagem/www/themes/apple/img/icon_tw.png) left top no-repeat}#about p.links
 a.ml{background:url(/refilmagem/www/themes/apple/img/icon_ml.png) left top no-repeat}a.zee{display:block;width:76px;height:37px;background:url(/refilmagem/www/themes/apple/img/logo_zee.jpg) left top no-repeat;text-indent: -9000px;margin:10px
