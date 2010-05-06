@@ -28,30 +28,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>84</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>2</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>6</integer>
-			<key>selectFrom</key>
+			<integer>0</integer>
+		</dict>
+		<key>jqtouch/jqtouch.css</key>
+		<dict>
+			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>2</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>0</integer>
 			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>84</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 		<key>refilmagem.js</key>
 		<dict>
@@ -65,16 +63,46 @@
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>480</integer>
+			<integer>1003</integer>
 		</dict>
 		<key>temp.txt</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>105</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>8</integer>
+				<integer>9</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>105</integer>
+				<key>line</key>
+				<integer>9</integer>
+			</dict>
+		</dict>
+		<key>themes/apple/theme.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -85,6 +113,8 @@
 	<key>openDocuments</key>
 	<array>
 		<string>index.html</string>
+		<string>themes/apple/theme.css</string>
+		<string>jqtouch/jqtouch.css</string>
 		<string>refilmagem.js</string>
 		<string>temp.txt</string>
 	</array>
@@ -100,6 +130,13 @@
 			<true/>
 			<key>subItems</key>
 			<dict>
+				<key>jqtouch</key>
+				<dict>
+					<key>isExpanded</key>
+					<true/>
+					<key>subItems</key>
+					<dict/>
+				</dict>
 				<key>themes</key>
 				<dict>
 					<key>isExpanded</key>
@@ -119,6 +156,6 @@
 		</dict>
 	</dict>
 	<key>windowFrame</key>
-	<string>{{0, 0}, {1676, 1028}}</string>
+	<string>{{0, 0}, {1436, 878}}</string>
 </dict>
 </plist>

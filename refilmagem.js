@@ -1028,8 +1028,7 @@ $(function (){
 		//para debug
 		// cidade = 'Porto Alegre';
 		// view.init('-30.02167427,-51.16154187',cidade);
-
-		$('#home ul, #proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
+		$('#home ul li:first, #proximas-sessoes ul, #filmes-em-cartaz ul, #cinema ul, #cinemas ul').click(function(){
 			view.loaderVisible(true);
 		});
 
