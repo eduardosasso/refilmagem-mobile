@@ -8,3 +8,36 @@ java -jar ~/Tools/yuicompressor-2.4.2.jar --type js jqtouch/jqtouch.js -o jqtouc
 
 java -jar ~/Tools/yuicompressor-2.4.2.jar --type css jqtouch/jqtouch.css -o jqtouch/jqtouch.min.css
 java -jar ~/Tools/yuicompressor-2.4.2.jar --type css themes/apple/theme.css -o themes/apple/theme.min.css
+
+
+-- maps exemplos
+
+http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=from:%20500%20Memorial%20Drive,%20Cambridge,%20MA%20to:%204%20Yawkey%20Way,%20Boston,%20MA%2002215%20%28Fenway%20Park%29
+
+http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=from:Rodolfo%20Simch%20425%20Jardim%20Lindoia%20Porto%20Alegre%20to:Rua%20dos%20Andradas%2C%201001%20%20Porto%20Alegre%20-%20RS%2C%2090020-007
+
+http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=from:-29.9986925%2C-51.1487349%20 to:Rua%20dos%20Andradas%2C%201001%20%20Porto%20Alegre%20-%20RS%2C%2090020-007
+
+http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=from:-29.9986925,-51.1487349  to:r. praia de belas, 1181, porto alegre - rs, 90110-001
+
+showLocation('-29.9986925:-51.1487349', endereco);
+
+
+http://maps.google.com/maps/api/geocode/json?address=av. borges de medeiros, 475, porto alegre - rs, 90010-200&sensor=false
+
+r. praia de belas, 1181, porto alegre - rs, 90110-001
+
+http://maps.google.com/maps/geo?q=Av. João Walling 1800 , Porto Alegre - RS, 91349-900&sensor=false&oe=utf-8&output=json&callback=?
+
+
+
+http://maps.google.com/maps/geo?q=-30.02167427,-51.16154187&sensor=false
+
+
+
+http://maps.google.com/maps/api/geocode/json?latlng=-30.02167427,-51.16154187&sensor=false
+
+
+http://maps.google.com/maps/nav?key=ABQIAAAAzr2EBOXUKnm_jVnk0OJI7xSosDVG8KKPE1-m51RBrvYughuyMxQ-i1QfUnH94QxWIa6N4U6MouMmBA&output=js&doflg=ptj&q=from:-29.9986925,-51.1487349 to:avenida borges de medeiros, 475, porto alegre - rs, 90010-200, Brasil
+
+Av. Borges de Medeiros, 475, Porto Alegre - RS, 90010-200
